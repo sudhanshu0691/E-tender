@@ -1,0 +1,92 @@
+[
+  {
+    "id": "vendor-001",
+    "companyName": "Apex Infra Solutions",
+    "orgType": "Private Limited",
+    "kycStatus": "pending",
+    "msme": true,
+    "state": "Maharashtra",
+    "registeredAt": "2026-05-08T09:20:00Z"
+  },
+  {
+    "id": "vendor-002",
+    "companyName": "Shakti Buildcon",
+    "orgType": "LLP",
+    "kycStatus": "under-review",
+    "msme": false,
+    "state": "Gujarat",
+    "registeredAt": "2026-05-07T11:15:00Z"
+  },
+  {
+    "id": "vendor-003",
+    "companyName": "Sudarshan Engineering Works",
+    "orgType": "Private Limited",
+    "kycStatus": "approved",
+    "msme": true,
+    "state": "Rajasthan",
+    "registeredAt": "2026-04-28T14:40:00Z"
+  },
+  {
+    "id": "vendor-004",
+    "companyName": "Narmada Logistics",
+    "orgType": "Partnership",
+    "kycStatus": "under-review",
+    "msme": false,
+    "state": "Madhya Pradesh",
+    "registeredAt": "2026-04-26T12:10:00Z"
+  },
+  {
+    "id": "vendor-005",
+    "companyName": "BlueStone Fabricators",
+    "orgType": "Private Limited",
+    "kycStatus": "approved",
+    "msme": false,
+    "state": "Tamil Nadu",
+    "registeredAt": "2026-04-18T10:05:00Z"
+  },
+  {
+    "id": "vendor-006",
+    "companyName": "Sangam Green Energy",
+    "orgType": "Private Limited",
+    "kycStatus": "approved",
+    "msme": true,
+    "state": "Karnataka",
+    "registeredAt": "2026-04-14T10:00:00Z"
+  },
+  {
+    "id": "vendor-007",
+    "companyName": "Lotus ITS India",
+    "orgType": "LLP",
+    "kycStatus": "pending",
+    "msme": false,
+    "state": "Delhi",
+    "registeredAt": "2026-04-11T08:00:00Z"
+  },
+  {
+    "id": "vendor-008",
+    "companyName": "Paramount Civil Works",
+    "orgType": "Proprietorship",
+    "kycStatus": "rejected",
+    "msme": false,
+    "state": "Uttar Pradesh",
+    "registeredAt": "2026-04-08T16:45:00Z"
+  },
+  {
+    "id": "vendor-009",
+    "companyName": "Indus Rail Tech",
+    "orgType": "Private Limited",
+    "kycStatus": "approved",
+    "msme": true,
+    "state": "West Bengal",
+    "registeredAt": "2026-03-28T07:35:00Z"
+  },
+  {
+    "id": "vendor-010",
+    "companyName": "Triveni Smart Systems",
+    "orgType": "LLP",
+    "kycStatus": "under-review",
+    "msme": true,
+    "state": "Telangana",
+    "registeredAt": "2026-03-18T12:15:00Z"
+  }
+]

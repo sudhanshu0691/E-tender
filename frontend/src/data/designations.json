@@ -1,0 +1,12 @@
+[
+  { "id": "designation-001", "name": "Procurement Officer", "level": 2 },
+  { "id": "designation-002", "name": "Nodal Officer", "level": 1 },
+  { "id": "designation-003", "name": "Tender Inviting Authority", "level": 2 },
+  { "id": "designation-004", "name": "Deputy Director (Procurement)", "level": 2 },
+  { "id": "designation-005", "name": "Project Officer", "level": 3 },
+  { "id": "designation-006", "name": "Technical Director", "level": 1 },
+  { "id": "designation-007", "name": "DDO (Drawing & Disbursing Officer)", "level": 2 },
+  { "id": "designation-008", "name": "PAO (Principal Accounts Officer)", "level": 2 },
+  { "id": "designation-009", "name": "Bid Opener", "level": 3 },
+  { "id": "designation-010", "name": "Bid Evaluator", "level": 3 }
+]

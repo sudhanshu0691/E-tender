@@ -1,0 +1,120 @@
+{
+  "TC-MH-2024-883": [
+    {
+      "bidderId": "vendor-001",
+      "walletAddress": "0x41b2d3e4f5a6c7d8e9f00112233445566778899a",
+      "submittedAt": "2026-05-14T09:20:00Z",
+      "encrypted": false,
+      "price": 4150000000,
+      "scores": {
+        "price": 8,
+        "financial": 9,
+        "experience": 8,
+        "performance": 7,
+        "technical": 9,
+        "compliance": 10,
+        "proposal": 8
+      }
+    },
+    {
+      "bidderId": "vendor-003",
+      "walletAddress": "0x8f7e6d5c4b3a29181716151413121110aabbccdd",
+      "submittedAt": "2026-05-14T10:40:00Z",
+      "encrypted": false,
+      "price": 4020000000,
+      "scores": {
+        "price": 9,
+        "financial": 8,
+        "experience": 9,
+        "performance": 8,
+        "technical": 8,
+        "compliance": 10,
+        "proposal": 9
+      }
+    },
+    {
+      "bidderId": "vendor-006",
+      "walletAddress": "0x1234abcd5678ef901234abcd5678ef901234abcd",
+      "submittedAt": "2026-05-14T12:05:00Z",
+      "encrypted": true,
+      "price": 3895000000,
+      "scores": {
+        "price": 0,
+        "financial": 0,
+        "experience": 0,
+        "performance": 0,
+        "technical": 0,
+        "compliance": 0,
+        "proposal": 0
+      }
+    }
+  ],
+  "TC-DL-2024-102": [
+    {
+      "bidderId": "vendor-002",
+      "walletAddress": "0xaabbccddeeff0011223344556677889900112233",
+      "submittedAt": "2026-04-27T13:12:00Z",
+      "encrypted": false,
+      "price": 1180000000,
+      "scores": {
+        "price": 10,
+        "financial": 8,
+        "experience": 9,
+        "performance": 7,
+        "technical": 9,
+        "compliance": 9,
+        "proposal": 8
+      }
+    },
+    {
+      "bidderId": "vendor-005",
+      "walletAddress": "0x99887766554433221100ffeeddccbbaa99887766",
+      "submittedAt": "2026-04-27T15:40:00Z",
+      "encrypted": false,
+      "price": 1215000000,
+      "scores": {
+        "price": 9,
+        "financial": 9,
+        "experience": 8,
+        "performance": 8,
+        "technical": 8,
+        "compliance": 10,
+        "proposal": 9
+      }
+    }
+  ],
+  "TC-RJ-2024-405": [
+    {
+      "bidderId": "vendor-004",
+      "walletAddress": "0x1111222233334444555566667777888899990000",
+      "submittedAt": "2026-03-10T08:30:00Z",
+      "encrypted": false,
+      "price": 2045000000,
+      "scores": {
+        "price": 8,
+        "financial": 8,
+        "experience": 8,
+        "performance": 9,
+        "technical": 9,
+        "compliance": 10,
+        "proposal": 8
+      }
+    },
+    {
+      "bidderId": "vendor-009",
+      "walletAddress": "0xffeeddccbbaa99887766554433221100ffeeddcc",
+      "submittedAt": "2026-03-10T10:25:00Z",
+      "encrypted": false,
+      "price": 1980000000,
+      "scores": {
+        "price": 9,
+        "financial": 9,
+        "experience": 9,
+        "performance": 8,
+        "technical": 9,
+        "compliance": 10,
+        "proposal": 9
+      }
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "TC-MH-2024-883": [
+    {
+      "id": "dispute-001",
+      "tenderId": "TC-MH-2024-883",
+      "tenderTitle": "PWD Road Construction - Indore",
+      "claimantId": "vendor-002",
+      "claimantName": "BuildTech Enterprises",
+      "reason": "Technical bid not properly evaluated. Our experience was underrated.",
+      "evidenceIPFSHash": "QmDispute001Evidence",
+      "submittedAt": "2026-05-16T10:30:00Z",
+      "status": "under-review",
+      "resolutionText": null,
+      "resolutionIPFSHash": null,
+      "resolvedAt": null
+    }
+  ],
+  "TC-DL-2024-102": [
+    {
+      "id": "dispute-002",
+      "tenderId": "TC-DL-2024-102",
+      "tenderTitle": "Healthcare IT Infrastructure",
+      "claimantId": "vendor-004",
+      "claimantName": "Digital Health Solutions",
+      "reason": "Financial bid evaluation contains calculation error. Request recount.",
+      "evidenceIPFSHash": "QmDispute002Evidence",
+      "submittedAt": "2026-05-17T14:20:00Z",
+      "status": "open",
+      "resolutionText": null,
+      "resolutionIPFSHash": null,
+      "resolvedAt": null
+    }
+  ]
+}

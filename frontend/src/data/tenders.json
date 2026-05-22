@@ -1,0 +1,44 @@
+[
+  {
+    "id": "TC-MH-2024-883",
+    "title": "Construction of 4-Lane Highway from Pune to Nashik",
+    "department": "Ministry of Road Transport and Highways",
+    "budget": "₹ 4,500 Cr",
+    "deadline": "2024-12-15T23:59:59Z",
+    "status": "Open",
+    "category": "Infrastructure",
+    "state": "Maharashtra",
+    "verified": true,
+    "bidsReceived": 12,
+    "hash": "0x8f3c...4a12",
+    "deadlinePassed": false
+  },
+  {
+    "id": "TC-DL-2024-102",
+    "title": "Supply of Medical Equipment for AIIMS Delhi Extension",
+    "department": "Ministry of Health and Family Welfare",
+    "budget": "₹ 120 Cr",
+    "deadline": "2024-11-30T23:59:59Z",
+    "status": "Closed",
+    "category": "Healthcare",
+    "state": "Delhi",
+    "verified": true,
+    "bidsReceived": 45,
+    "hash": "0x2a1b...9c3d",
+    "deadlinePassed": true
+  },
+  {
+    "id": "TC-RJ-2024-405",
+    "title": "Installation of 500MW Solar Park in Jaisalmer",
+    "department": "Ministry of New and Renewable Energy",
+    "budget": "₹ 2,100 Cr",
+    "deadline": "2024-11-20T23:59:59Z",
+    "status": "Awarded",
+    "category": "Energy",
+    "state": "Rajasthan",
+    "verified": true,
+    "bidsReceived": 8,
+    "hash": "0x7d4e...1b9f",
+    "deadlinePassed": true
+  }
+]

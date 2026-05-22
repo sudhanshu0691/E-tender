@@ -1,0 +1,50 @@
+{
+  "TC-MH-2024-883": [
+    {
+      "type": "Created",
+      "label": "Tender contract deployed by officer",
+      "timestamp": "2026-05-13T05:30:00Z",
+      "txHash": "0x91aa1dd8ee9dfe44bc4c770011223344556677889900aabbccddeeff00112233",
+      "data": { "department": "Public Works Department" }
+    },
+    {
+      "type": "Document",
+      "label": "Specification PDF pinned to IPFS",
+      "timestamp": "2026-05-13T05:35:00Z",
+      "txHash": "0x22bb2ee8ff10cd55ac5d880011223344556677889900aabbccddeeff00114455",
+      "data": { "ipfsHash": "ipfs://QmTenderSpec883" }
+    },
+    {
+      "type": "Bid",
+      "label": "Encrypted bids received from vendors",
+      "timestamp": "2026-05-14T12:05:00Z",
+      "txHash": "0x33cc3ff90011ab66bb6e990011223344556677889900aabbccddeeff00116677",
+      "data": { "bidsReceived": 3 }
+    }
+  ],
+  "TC-DL-2024-102": [
+    {
+      "type": "Created",
+      "label": "Tender published to blockchain",
+      "timestamp": "2026-04-22T05:30:00Z",
+      "txHash": "0x44dd4aa01122bc77cc7f0011223344556677889900aabbccddeeff00118899aa",
+      "data": { "department": "Ministry of Health and Family Welfare" }
+    },
+    {
+      "type": "Bid",
+      "label": "Bid opening completed after deadline",
+      "timestamp": "2026-04-28T06:00:00Z",
+      "txHash": "0x55ee5bb12233cd88dd8f0011223344556677889900aabbccddeeff0011aa11bb",
+      "data": { "bidders": 2 }
+    }
+  ],
+  "TC-RJ-2024-405": [
+    {
+      "type": "Awarded",
+      "label": "Winner declared and contract locked",
+      "timestamp": "2026-03-12T09:45:00Z",
+      "txHash": "0x66ff6cc23344de99ee9f0011223344556677889900aabbccddeeff0011cc22dd",
+      "data": { "winner": "vendor-009" }
+    }
+  ]
+}

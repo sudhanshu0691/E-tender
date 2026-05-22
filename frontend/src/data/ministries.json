@@ -1,0 +1,142 @@
+[
+  {
+    "id": "central-001",
+    "name": "Ministry of Road Transport and Highways",
+    "code": "MoRTH",
+    "type": "Central Ministry",
+    "state": "National"
+  },
+  {
+    "id": "central-002",
+    "name": "Ministry of Defence",
+    "code": "MoD",
+    "type": "Central Ministry",
+    "state": "National"
+  },
+  {
+    "id": "central-003",
+    "name": "Ministry of Railways",
+    "code": "MoR",
+    "type": "Central Ministry",
+    "state": "National"
+  },
+  {
+    "id": "central-004",
+    "name": "Ministry of Health and Family Welfare",
+    "code": "MoHFW",
+    "type": "Central Ministry",
+    "state": "National"
+  },
+  {
+    "id": "central-005",
+    "name": "Ministry of Housing and Urban Affairs",
+    "code": "MoHUA",
+    "type": "Central Ministry",
+    "state": "National"
+  },
+  {
+    "id": "central-006",
+    "name": "Ministry of Commerce and Industry",
+    "code": "MoCI",
+    "type": "Central Ministry",
+    "state": "National"
+  },
+  {
+    "id": "central-007",
+    "name": "Ministry of Power",
+    "code": "MoP",
+    "type": "Central Ministry",
+    "state": "National"
+  },
+  {
+    "id": "central-008",
+    "name": "Ministry of Water Resources",
+    "code": "MoWR",
+    "type": "Central Ministry",
+    "state": "National"
+  },
+  {
+    "id": "state-001",
+    "name": "Public Works Department, Maharashtra",
+    "code": "PWD-MH",
+    "type": "State Department",
+    "state": "Maharashtra"
+  },
+  {
+    "id": "state-002",
+    "name": "Public Works Department, Madhya Pradesh",
+    "code": "PWD-MP",
+    "type": "State Department",
+    "state": "Madhya Pradesh"
+  },
+  {
+    "id": "state-003",
+    "name": "Urban Development Department, Maharashtra",
+    "code": "UD-MH",
+    "type": "State Department",
+    "state": "Maharashtra"
+  },
+  {
+    "id": "state-004",
+    "name": "Health Department, Karnataka",
+    "code": "HD-KA",
+    "type": "State Department",
+    "state": "Karnataka"
+  },
+  {
+    "id": "state-005",
+    "name": "Energy Department, Gujarat",
+    "code": "ED-GJ",
+    "type": "State Department",
+    "state": "Gujarat"
+  },
+  {
+    "id": "psu-001",
+    "name": "National Highways Authority of India",
+    "code": "NHAI",
+    "type": "PSU",
+    "state": "National"
+  },
+  {
+    "id": "psu-002",
+    "name": "Power Grid Corporation of India",
+    "code": "PGCIL",
+    "type": "PSU",
+    "state": "National"
+  },
+  {
+    "id": "defense-001",
+    "name": "Defence Research and Development Organisation",
+    "code": "DRDO",
+    "type": "Defence",
+    "state": "National"
+  },
+  {
+    "id": "railways-001",
+    "name": "Indian Railways, Central Zone",
+    "code": "IR-CZ",
+    "type": "Railways",
+    "state": "National"
+  },
+  {
+    "id": "localbody-001",
+    "name": "Pune Municipal Corporation",
+    "code": "PMC",
+    "type": "Local Body",
+    "state": "Maharashtra"
+  },
+  {
+    "id": "localbody-002",
+    "name": "Bangalore City Corporation",
+    "code": "BCC",
+    "type": "Local Body",
+    "state": "Karnataka"
+  },
+  {
+    "id": "autonomous-001",
+    "name": "National Institute of Technology, Raipur",
+    "code": "NIT-R",
+    "type": "Autonomous Body",
+    "state": "Chhattisgarh"
+  }
+]
