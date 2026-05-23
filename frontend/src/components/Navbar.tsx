@@ -1,8 +1,17 @@
+"use client"
+
 import Link from "next/link"
 import { Shield, Menu, Globe } from "lucide-react"
 import { Button } from "./ui/button"
+import { usePathname } from "next/navigation"
 
 export default function Navbar() {
+  const pathname = usePathname()
+  
+  // Hide navbar on admin and vendor routes
+  if (pathname.startsWith('/admin') || pathname.startsWith('/vendor')) {
+    return null
+  }
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-white shadow-sm">
       {/* Top Strip */}
@@ -67,7 +76,7 @@ export default function Navbar() {
           </Link>
           <Link href="/register">
             <Button className="bg-[#0B3D91] hover:bg-[#0B3D91]/90 font-semibold shadow-sm">
-              Register as Vendor
+              Register 
             </Button>
           </Link>
         </div>

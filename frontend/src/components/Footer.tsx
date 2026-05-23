@@ -1,7 +1,17 @@
+"use client"
+
 import Link from "next/link"
 import { Shield } from "lucide-react"
+import { usePathname } from "next/navigation"
 
 export default function Footer() {
+  const pathname = usePathname()
+  
+  // Hide footer on admin and vendor routes
+  if (pathname.startsWith('/admin') || pathname.startsWith('/vendor')) {
+    return null
+  }
+  
   return (
     <footer className="bg-[#0B3D91] text-white">
       <div className="container mx-auto px-4 py-12">

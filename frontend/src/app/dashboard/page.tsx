@@ -2,12 +2,14 @@
 
 import { useState } from "react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line } from "recharts"
 import { LayoutDashboard, FileText, CheckCircle2, AlertCircle, TrendingUp, Settings, LogOut, Wallet, ShieldCheck, Download, ExternalLink, Bell, Lock } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
+import { useAuth } from "@/components/AuthProvider"
 
 const monthlyData = [
   { name: 'Jan', bids: 4 }, { name: 'Feb', bids: 3 }, { name: 'Mar', bids: 7 },
@@ -496,6 +498,13 @@ const SettingsTab = () => (
 
 export default function DashboardPage() {
   const [activeTab, setActiveTab] = useState("overview")
+  const router = useRouter()
+  const { logout } = useAuth()
+
+  const handleLogout = () => {
+    logout()
+    router.replace("/login")
+  }
 
   const renderContent = () => {
     switch (activeTab) {
@@ -561,7 +570,10 @@ export default function DashboardPage() {
             <Settings className={`h-5 w-5 ${activeTab === "settings" ? "text-[#0B3D91]" : "text-gray-400"}`} />
             <span>Settings</span>
           </button>
-          <button className="w-full flex items-center space-x-3 px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-50 rounded-md">
+          <button
+            onClick={handleLogout}
+            className="w-full flex items-center space-x-3 px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-50 rounded-md"
+          >
             <LogOut className="h-5 w-5 text-red-400" />
             <span>Logout</span>
           </button>
