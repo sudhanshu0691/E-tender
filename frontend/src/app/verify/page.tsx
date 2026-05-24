@@ -2,15 +2,30 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { ArrowLeft, Search, CheckCircle2, AlertTriangle, ExternalLink, Lock } from "lucide-react"
+import { ArrowLeft, CheckCircle2, AlertTriangle, ExternalLink, Lock } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Badge } from "@/components/ui/badge"
+interface TransactionResult {
+  found: boolean
+  txHash?: string
+  type?: string
+  status?: string
+  confirmations?: number
+  blockNumber?: number
+  timestamp?: string
+  from?: string
+  to?: string
+  gasUsed?: string
+  gasPrice?: string
+  value?: string
+  functionName?: string
+  contractAddress?: string
+}
 
 export default function VerifyPage() {
   const [searchHash, setSearchHash] = useState("")
-  const [searchResults, setSearchResults] = useState<any | null>(null)
+  const [searchResults, setSearchResults] = useState<TransactionResult | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const [hasSearched, setHasSearched] = useState(false)
 
@@ -109,10 +124,10 @@ export default function VerifyPage() {
                     {[
                       ["Transaction Hash", searchResults.txHash],
                       ["Status", searchResults.status],
-                      ["Block Number", searchResults.blockNumber.toLocaleString()],
-                      ["Confirmations", String(searchResults.confirmations)],
-                      ["Type", searchResults.type],
-                      ["Timestamp", new Date(searchResults.timestamp).toLocaleString()],
+                      ["Block Number", searchResults.blockNumber?.toLocaleString() ?? ""],
+                      ["Confirmations", String(searchResults.confirmations ?? "")],
+                      ["Type", searchResults.type ?? ""],
+                      ["Timestamp", searchResults.timestamp ? new Date(searchResults.timestamp).toLocaleString() : ""],
                     ].map(([label, value]) => (
                       <div key={label}>
                         <label className="text-sm text-slate-600">{label}</label>
@@ -146,12 +161,12 @@ export default function VerifyPage() {
                 <CardContent>
                   <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                     {[
-                      ["Gas Used", parseInt(searchResults.gasUsed).toLocaleString()],
-                      ["Gas Price", searchResults.gasPrice],
-                      ["Function Called", searchResults.functionName],
+                      ["Gas Used", parseInt(searchResults.gasUsed ?? "0").toLocaleString()],
+                      ["Gas Price", searchResults.gasPrice ?? ""],
+                      ["Function Called", searchResults.functionName ?? ""],
                       [
                         "Transaction Fee",
-                        `${((parseInt(searchResults.gasUsed) * parseInt(searchResults.gasPrice)) / 1e18).toFixed(4)} ETH`,
+                        `${((parseInt(searchResults.gasUsed ?? "0") * parseInt(searchResults.gasPrice ?? "0")) / 1e18).toFixed(4)} ETH`,
                       ],
                     ].map(([label, value]) => (
                       <div key={label} className="rounded-lg bg-slate-50 p-3">

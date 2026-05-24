@@ -113,7 +113,7 @@ export function AdminPageContent({ page = "dashboard" }: AdminPageContentProps) 
                           {tender.status}
                         </span>
                       </div>
-                      <h3 className="text-lg font-semibold text-gray-900 mb-2">{tender.title}</h3>
+                      <h3 className="text-lg font-semibold text-gray-900 mb-2">{tender.tenderTitle}</h3>
                       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                         <div>
                           <p className="text-gray-500 text-xs">Budget</p>

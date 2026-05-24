@@ -16,22 +16,23 @@ interface Dispute {
   id: string
   tenderId: string
   tenderTitle: string
-  tenderNitNo: string
+  tenderNitNo?: string
   claimantId: string
   claimantName: string
   reason: string
   evidenceIPFSHash: string
   submittedAt: string
   status: string
-  resolutionText?: string
-  resolutionIPFSHash?: string
-  resolvedAt?: string
+  resolutionText?: string | null
+  resolutionIPFSHash?: string | null
+  resolvedAt?: string | null
 }
 
 export default function DisputePage({ params }: { params: { tenderId: string } }) {
   const { tenderId } = params
-  const tender = (tendersData as any)[tenderId]
-  const existingDispute = (disputesData as Dispute[]).find((d) => d.tenderId === tenderId && d.status !== 'resolved')
+  const tender = (tendersData as { id: string; tenderTitle?: string; nit?: string; nitNo?: string; status?: string; category?: string }[]).find((t) => t.id === tenderId)
+  const disputesByTender = disputesData as Record<string, Dispute[]>
+  const existingDispute = (disputesByTender[tenderId] ?? []).find((d) => d.status !== 'resolved')
 
   const { isOpen, title, openTx, closeTx, setTxHash } = useBlockchainTx()
 
@@ -109,7 +110,7 @@ export default function DisputePage({ params }: { params: { tenderId: string } }
           </Link>
 
           <Card className="border-green-200 bg-green-50 dark:border-green-900 dark:bg-green-900/20">
-            <CardContent className="pt-12 pb-12 text-center">
+            <CardContent className="pt-8 pb-8 text-center">
               <CheckCircle2 className="h-16 w-16 text-green-600 dark:text-green-400 mx-auto mb-6" />
               <h2 className="text-2xl font-bold text-green-900 dark:text-green-300 mb-2">Dispute Submitted Successfully</h2>
               <p className="text-green-800 dark:text-green-400 mb-6">
@@ -341,7 +342,7 @@ export default function DisputePage({ params }: { params: { tenderId: string } }
                       <FileText className="h-5 w-5 text-teal-600" />
                       <div>
                         <p className="text-sm font-medium">{doc.name}</p>
-                        <IPFSHashPill hash={doc.hash} showLink={true} />
+                        <IPFSHashPill hash={doc.hash} />
                       </div>
                     </div>
                     <Button
@@ -398,10 +399,11 @@ export default function DisputePage({ params }: { params: { tenderId: string } }
 
       {/* Blockchain TX Modal */}
       <BlockchainTxModal
-        isOpen={isOpen}
+        open={isOpen}
         onClose={closeTx}
         title={title}
-        onSuccess={(hash) => {
+        actionLabel="Dispute Submission"
+        onComplete={(hash) => {
           console.log('Dispute submitted with tx:', hash)
         }}
       />

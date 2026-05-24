@@ -4,9 +4,9 @@ import { FileText, Lock, Blocks, CheckCircle2, ShieldCheck, ChevronRight } from 
 
 export default function HowItWorksPage() {
   return (
-    <div className="container mx-auto px-4 py-12 md:py-16">
+    <div className="container mx-auto px-4 py-10 md:py-12">
       <div className="max-w-4xl mx-auto">
-        <div className="text-center mb-16">
+        <div className="text-center mb-10">
           <div className="inline-flex items-center space-x-2 rounded-full border border-[#FF9933]/20 bg-[#FF9933]/10 px-3 py-1 text-sm font-medium text-[#FF9933] mb-4">
             <ShieldCheck className="h-4 w-4" />
             <span>Process Documentation</span>
@@ -19,7 +19,7 @@ export default function HowItWorksPage() {
           </p>
         </div>
 
-        <div className="space-y-16">
+        <div className="space-y-10">
           {/* Step 1 */}
           <div className="relative">
             <div className="md:flex items-center gap-10">
@@ -131,7 +131,7 @@ export default function HowItWorksPage() {
           </div>
         </div>
 
-        <div className="mt-20 bg-white p-8 rounded-2xl border border-gray-200 shadow-sm text-center">
+        <div className="mt-12 bg-white p-8 rounded-2xl border border-gray-200 shadow-sm text-center">
           <h2 className="font-poppins text-2xl font-bold text-[#0B3D91] mb-4">Ready to participate in transparent procurement?</h2>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
             <button className="bg-[#0B3D91] hover:bg-[#0B3D91]/90 text-white px-6 py-3 rounded-md font-semibold inline-flex items-center justify-center">

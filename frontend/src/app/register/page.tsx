@@ -50,7 +50,7 @@ export default function RegisterPage() {
 
   if (success && successData) {
     return (
-      <div className="container mx-auto px-4 py-16 flex justify-center min-h-[70vh]">
+      <div className="container mx-auto px-4 py-10 flex justify-center min-h-[60vh]">
         <div className="max-w-md w-full bg-white rounded-xl shadow-lg border border-gray-200 p-8 text-center animate-in fade-in zoom-in duration-500">
           <div className="mx-auto w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mb-6">
             <Blocks className="h-10 w-10 text-[#138808]" />

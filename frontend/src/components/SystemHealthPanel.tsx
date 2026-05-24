@@ -52,11 +52,14 @@ function HealthIndicator({ icon, label, status, details, link }: HealthIndicator
   return content
 }
 
+function mapStatus(status: string): "green" | "yellow" | "red" {
+  if (status === "ok") return "green"
+  if (status === "degraded") return "yellow"
+  return "red"
+}
+
 export function SystemHealthPanel() {
-  const blockchain = systemHealthData.blockchain
-  const ipfs = systemHealthData.ipfs
-  const database = systemHealthData.database
-  const smartContract = systemHealthData.smartContract
+  const services = systemHealthData.services
 
   return (
     <div className="space-y-3">
@@ -64,28 +67,27 @@ export function SystemHealthPanel() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
         <HealthIndicator
           icon={<LinkIcon className="h-5 w-5" />}
-          label="Blockchain (Sepolia)"
-          status={blockchain.status as "green" | "yellow" | "red"}
-          details={`Block ${blockchain.blockHeight} • ${blockchain.latency}ms`}
+          label={`Blockchain (${services.blockchainNode.network})`}
+          status={mapStatus(services.blockchainNode.status)}
+          details={`RPC: ${services.blockchainNode.rpc.split("/").pop() ?? "connected"}`}
         />
         <HealthIndicator
           icon={<Zap className="h-5 w-5" />}
           label="IPFS Gateway"
-          status={ipfs.status as "green" | "yellow" | "red"}
-          details={`${ipfs.gateway} • ${ipfs.latency}ms`}
+          status={mapStatus(services.ipfs.status)}
+          details={services.ipfs.endpoint}
         />
         <HealthIndicator
           icon={<Database className="h-5 w-5" />}
-          label="Database"
-          status={database.status as "green" | "yellow" | "red"}
-          details={`Operational • ${database.latency}ms`}
+          label="KYC Service"
+          status={mapStatus(services.kycService.status)}
+          details="Operational"
         />
         <HealthIndicator
           icon={<Lock className="h-5 w-5" />}
-          label="Smart Contract"
-          status={smartContract.status as "green" | "yellow" | "red"}
-          details={`Verified • ${smartContract.address.slice(0, 8)}...${smartContract.address.slice(-6)}`}
-          link={smartContract.etherscanUrl}
+          label="Email Service"
+          status={mapStatus(services.emailService.status)}
+          details={`${services.emailService.pendingQueue} pending in queue`}
         />
       </div>
     </div>

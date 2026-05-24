@@ -79,7 +79,7 @@ export default function LoginPage() {
   const isUnauthorized = searchParams.get("unauthorized") === "true"
 
   return (
-    <div className="container mx-auto px-4 py-16 flex justify-center min-h-[75vh] items-center bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] bg-opacity-50">
+    <div className="container mx-auto px-4 py-10 flex justify-center min-h-[70vh] items-center bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] bg-opacity-50">
       {isUnauthorized && (
         <div className="fixed top-4 left-4 right-4 z-50 rounded-lg border border-red-200 bg-red-50 px-4 py-3 shadow-lg max-w-md mx-auto">
           <div className="flex items-start gap-3">

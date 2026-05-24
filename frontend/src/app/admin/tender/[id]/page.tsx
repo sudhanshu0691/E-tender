@@ -86,8 +86,14 @@ export default function AdminTenderPage() {
     )
   }, [tenderId])
 
-  const rawBids = ((tenderBidsData as Record<string, any>)[tender.id] ?? []) as TenderBid[]
-  const auditEvents = ((auditEventsData as Record<string, any>)[tender.id] ?? []) as AuditEvent[]
+  const rawBids = useMemo(
+    () => ((tenderBidsData as Record<string, any>)[tender.id] ?? []) as TenderBid[],
+    [tender.id],
+  )
+  const auditEvents = useMemo(
+    () => ((auditEventsData as Record<string, any>)[tender.id] ?? []) as AuditEvent[],
+    [tender.id],
+  )
   const deadlinePassed = Boolean((tender as any).deadlinePassed)
 
   const [activeTab, setActiveTab] = useState<"bids" | "audit" | "info">("bids")

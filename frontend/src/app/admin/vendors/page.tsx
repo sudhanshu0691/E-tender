@@ -62,7 +62,7 @@ export default function VendorsManagementPage() {
       setVendors((prev) =>
         prev.map((v) =>
           v.vendorId === selectedVendor
-            ? { ...v, kycStatus: 'approved', kycLevel }
+            ? { ...v, kycStatus: 'approved', kycLevel: kycLevelSelect }
             : v
         )
       )

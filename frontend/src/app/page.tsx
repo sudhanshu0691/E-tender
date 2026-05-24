@@ -12,7 +12,7 @@ export default function Home() {
   return (
     <div className="flex flex-col">
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-white py-16 md:py-24">
+      <section className="relative overflow-hidden bg-white py-10 md:py-14">
         <div className="absolute inset-0 bg-gradient-to-br from-[#0B3D91]/5 to-transparent"></div>
         <div className="container relative mx-auto px-4">
           <div className="grid gap-12 md:grid-cols-2 lg:gap-8 items-center">
@@ -121,11 +121,11 @@ export default function Home() {
       </section>
 
       {/* How It Works */}
-      <section className="bg-[#F8F9FC] py-16 md:py-24">
+      <section className="bg-[#F8F9FC] py-10 md:py-14">
         <div className="container mx-auto px-4">
-          <div className="mb-12 text-center">
+          <div className="mb-8 text-center">
             <h2 className="font-poppins text-3xl font-bold text-gray-900 md:text-4xl">How TenderChain Works</h2>
-            <p className="mt-4 text-lg text-gray-600">A seamless, trustless 4-step process powered by smart contracts.</p>
+            <p className="mt-3 text-lg text-gray-600">A seamless, trustless 4-step process powered by smart contracts.</p>
           </div>
           
           <div className="relative">
@@ -154,11 +154,11 @@ export default function Home() {
       </section>
 
       {/* Features Grid */}
-      <section className="bg-white py-16 md:py-24">
+      <section className="bg-white py-10 md:py-14">
         <div className="container mx-auto px-4">
-          <div className="mb-12 text-center">
+          <div className="mb-8 text-center">
             <h2 className="font-poppins text-3xl font-bold text-gray-900 md:text-4xl">Why TenderChain?</h2>
-            <p className="mt-4 text-lg text-gray-600">Built for scale, secured by mathematics, designed for the public.</p>
+            <p className="mt-3 text-lg text-gray-600">Built for scale, secured by mathematics, designed for the public.</p>
           </div>
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {[
@@ -186,9 +186,9 @@ export default function Home() {
       </section>
 
       {/* Recent Tenders */}
-      <section className="bg-[#F8F9FC] py-16 md:py-24">
+      <section className="bg-[#F8F9FC] py-10 md:py-14">
         <div className="container mx-auto px-4">
-          <div className="mb-10 flex items-center justify-between">
+          <div className="mb-8 flex items-center justify-between">
             <div>
               <h2 className="font-poppins text-3xl font-bold text-gray-900">Recent Live Tenders</h2>
               <p className="mt-2 text-gray-600">Browse the latest public procurement requests.</p>

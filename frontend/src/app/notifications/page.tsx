@@ -9,16 +9,12 @@ import notificationsData from '@/data/notifications.json'
 
 type Notification = {
   id: string
-  userId: string
-  userRole: string
   type: string
   title: string
   message: string
-  relatedEntityId: string
-  relatedEntityType: string
-  isRead: boolean
-  createdAt: string
-  channel: string
+  timestamp: string
+  read: boolean
+  tenderId: string | null
 }
 
 const typeConfig: Record<string, { icon: ComponentType<{ className?: string }>; color: string; label: string }> = {
@@ -39,7 +35,7 @@ export default function NotificationsPage() {
   const allNotifs = (notificationsData as Notification[])
   const [notifications, setNotifications] = useState(allNotifs)
   const [filter, setFilter] = useState('all')
-  const [unreadCount, setUnreadCount] = useState(notifications.filter((n) => !n.isRead).length)
+  const [unreadCount, setUnreadCount] = useState(notifications.filter((n) => !n.read).length)
 
   const typeFilters = ['all', 'tender_published', 'bid_confirmed', 'deadline_reminder', 'winner_declared', 'kyc_approved', 'dispute_update', 'system_alert']
 
@@ -47,15 +43,15 @@ export default function NotificationsPage() {
 
   const handleMarkAsRead = (id: string) => {
     setNotifications((prev) => {
-      const updated = prev.map((n) => (n.id === id ? { ...n, isRead: true } : n))
-      setUnreadCount(updated.filter((n) => !n.isRead).length)
+      const updated = prev.map((n) => (n.id === id ? { ...n, read: true } : n))
+      setUnreadCount(updated.filter((n) => !n.read).length)
       return updated
     })
   }
 
   const handleMarkAllAsRead = () => {
     setNotifications((prev) => {
-      const updated = prev.map((n) => ({ ...n, isRead: true }))
+      const updated = prev.map((n) => ({ ...n, read: true }))
       setUnreadCount(0)
       return updated
     })
@@ -128,10 +124,10 @@ export default function NotificationsPage() {
       <div className="space-y-3">
         {filteredNotifs.length === 0 ? (
           <Card className="border-dashed">
-            <CardContent className="py-12 text-center">
+            <CardContent className="py-8 text-center">
               <Bell className="h-12 w-12 text-slate-300 dark:text-slate-600 mx-auto mb-4" />
               <h3 className="text-lg font-medium text-slate-600 dark:text-slate-300 mb-2">No notifications</h3>
-              <p className="text-slate-500 dark:text-slate-400">You're all caught up!</p>
+              <p className="text-slate-500 dark:text-slate-400">You&apos;re all caught up!</p>
             </CardContent>
           </Card>
         ) : (
@@ -143,7 +139,7 @@ export default function NotificationsPage() {
               <Card
                 key={notif.id}
                 className={`cursor-pointer transition-all hover:shadow-md border-l-4 ${
-                  notif.isRead ? 'border-l-gray-300 bg-white dark:bg-slate-800' : 'border-l-teal-500 bg-teal-50 dark:bg-teal-900/20'
+                  notif.read ? 'border-l-gray-300 bg-white dark:bg-slate-800' : 'border-l-teal-500 bg-teal-50 dark:bg-teal-900/20'
                 }`}
                 onClick={() => handleNotificationClick(notif)}
               >
@@ -157,17 +153,17 @@ export default function NotificationsPage() {
                       <div className="flex items-start justify-between gap-4">
                         <div className="flex-1">
                           <div className="flex items-center gap-2">
-                            <h3 className={`font-semibold ${notif.isRead ? 'text-slate-700 dark:text-slate-300' : 'text-slate-900 dark:text-white'}`}>
+                            <h3 className={`font-semibold ${notif.read ? 'text-slate-700 dark:text-slate-300' : 'text-slate-900 dark:text-white'}`}>
                               {notif.title}
                             </h3>
-                            {!notif.isRead && <div className="w-2 h-2 rounded-full bg-teal-500" />}
+                            {!notif.read && <div className="w-2 h-2 rounded-full bg-teal-500" />}
                           </div>
                           <p className="text-sm text-slate-600 dark:text-slate-400 mt-1 line-clamp-2">{notif.message}</p>
                         </div>
 
                         <div className="flex items-center gap-2 flex-shrink-0">
                           <span className="text-xs text-slate-500 dark:text-slate-400 whitespace-nowrap">
-                            {formatDate(notif.createdAt)}
+                            {formatDate(notif.timestamp)}
                           </span>
                           <button
                             onClick={(e) => {
@@ -183,9 +179,9 @@ export default function NotificationsPage() {
 
                       <div className="mt-3 flex items-center gap-3">
                         <Badge variant="secondary" className="text-xs">
-                          {notif.relatedEntityType}
+                          {notif.type}
                         </Badge>
-                        {!notif.isRead && (
+                        {!notif.read && (
                           <Button
                             variant="ghost"
                             size="sm"

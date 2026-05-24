@@ -1,9 +1,8 @@
 'use client'
 
-import { useState } from 'react'
 import Link from 'next/link'
-import { ArrowLeft, AlertTriangle, Clock, FileText, Users, BarChart3, Gavel, CheckCircle2 } from 'lucide-react'
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
+import { ArrowLeft, AlertTriangle, Clock, FileText, BarChart3, Gavel, CheckCircle2 } from 'lucide-react'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { AuditTimeline } from '@/components/AuditTimeline'
@@ -13,13 +12,62 @@ import tendersData from '@/data/tenders.json'
 import tenderBidsData from '@/data/tenderBids.json'
 import auditEventsData from '@/data/auditEvents.json'
 
+interface TenderItem {
+  id: string
+  tenderTitle: string
+  nitNo: string
+  department: string
+  budget: number
+  emrAmount: number
+  deadline: string
+  status: string
+  category: string
+  state: string
+  verified: boolean
+  bidsReceived: number
+  hash: string
+  deadlinePassed: boolean
+  ipfsDocuments?: { name: string; type: string; ipfsHash: string }[]
+  evaluationWeights: Record<string, number>
+  winnerDeclaredAt: string | null
+}
+
+interface BidItem {
+  bidderId: string
+  companyName: string
+  walletAddress: string
+  bidHash: string
+  submittedAt: string
+  price: number
+  scores: Record<string, number>
+  totalScore: number
+  status: string
+  isWinner?: boolean
+  documents?: { name: string; ipfsHash: string }[]
+}
+
+interface BidsData {
+  tenderId: string
+  tenderTitle: string
+  deadline: string
+  deadlinePassed: boolean
+  evaluationWeights: Record<string, number>
+  bids: BidItem[]
+}
+
+interface AuditEventItem {
+  type: string
+  label: string
+  timestamp: string
+  txHash: string
+  data?: Record<string, unknown>
+}
+
 export default function PublicTenderDetailPage({ params }: { params: { id: string } }) {
   const { id } = params
-  const tender = (tendersData as any).find((t: any) => t.id === id)
-  const bidsData = (tenderBidsData as any)[id]
-  const auditEvents = (auditEventsData as any)[id] || []
-
-  const [showRaiseDispute, setShowRaiseDispute] = useState(false)
+  const tender = (tendersData as TenderItem[]).find((t) => t.id === id)
+  const bidsData = (tenderBidsData as unknown as Record<string, BidsData>)[id]
+  const auditEvents: AuditEventItem[] = (auditEventsData as unknown as Record<string, AuditEventItem[]>)[id] || []
 
   if (!tender) {
     return (
@@ -38,7 +86,7 @@ export default function PublicTenderDetailPage({ params }: { params: { id: strin
     )
   }
 
-  const winnerBid = bidsData?.bids?.find((b: any) => b.isWinner)
+  const winnerBid = bidsData?.bids?.find((b) => b.isWinner)
   const totalBids = bidsData?.bids?.length || 0
 
   return (
@@ -121,7 +169,7 @@ export default function PublicTenderDetailPage({ params }: { params: { id: strin
           </CardHeader>
           <CardContent>
             <div className="space-y-2">
-              {tender.ipfsDocuments?.map((doc: any) => (
+              {tender.ipfsDocuments?.map((doc) => (
                 <div key={doc.ipfsHash} className="p-3 border rounded-lg flex items-center justify-between hover:bg-slate-50 dark:hover:bg-slate-800">
                   <div className="flex items-center gap-3">
                     <FileText className="h-5 w-5 text-blue-600" />
@@ -131,7 +179,7 @@ export default function PublicTenderDetailPage({ params }: { params: { id: strin
                     </div>
                   </div>
                   <div>
-                    <IPFSHashPill hash={doc.ipfsHash} showLink={true} />
+                    <IPFSHashPill hash={doc.ipfsHash} />
                   </div>
                 </div>
               ))}
@@ -188,7 +236,7 @@ export default function PublicTenderDetailPage({ params }: { params: { id: strin
                     </tr>
                   </thead>
                   <tbody>
-                    {bidsData?.bids?.map((bid: any) => (
+                    {bidsData?.bids?.map((bid) => (
                       <tr key={bid.bidderId} className={bid.isWinner ? 'bg-green-50 dark:bg-green-900/20 font-bold' : ''}>
                         <td className="px-4 py-3">{bid.companyName}</td>
                         <td className="px-4 py-3 text-right">{bid.scores.price}</td>

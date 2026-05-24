@@ -4,15 +4,15 @@ import { Shield, Target, Award, Users } from "lucide-react"
 
 export default function AboutPage() {
   return (
-    <div className="container mx-auto px-4 py-16 max-w-5xl">
-      <div className="text-center mb-16">
+    <div className="container mx-auto px-4 py-10 max-w-5xl">
+      <div className="text-center mb-10">
         <h1 className="font-poppins text-4xl font-bold text-[#0B3D91] mb-4">About TenderChain</h1>
         <p className="text-xl text-gray-600 max-w-3xl mx-auto">
           Empowering Digital India with a transparent, immutable, and trustless public procurement infrastructure.
         </p>
       </div>
 
-      <div className="grid md:grid-cols-2 gap-12 mb-20 items-center">
+      <div className="grid md:grid-cols-2 gap-8 mb-12 items-center">
         <div>
           <h2 className="font-poppins text-3xl font-bold text-gray-900 mb-6">Our Mission</h2>
           <p className="text-gray-600 mb-4 leading-relaxed">
@@ -31,7 +31,7 @@ export default function AboutPage() {
         </div>
       </div>
 
-      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-20">
+      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
         {[
           { icon: Shield, title: "Zero Trust Architecture", desc: "Trust the math, not the middleman." },
           { icon: Target, title: "100% Auditability", desc: "Every action tracked in real-time." },
