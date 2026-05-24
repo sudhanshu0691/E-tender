@@ -1,4 +1,62 @@
 {
+  "TND-2026-001": {
+    "tenderId": "TND-2026-001",
+    "tenderTitle": "Smart City Road Infrastructure — Phase 2",
+    "deadline": "2026-05-20T17:00:00Z",
+    "deadlinePassed": true,
+    "evaluationWeights": { "price":40,"financial":15,"experience":15,"performance":10,"technical":10,"compliance":5,"proposal":5 },
+    "bids": [
+      {
+        "bidderId": "VEN-001",
+        "companyName": "Infra Build Pvt Ltd",
+        "walletAddress": "0xAbCdEf0011223344556677889900aAbCdEf0011",
+        "bidHash": "QmInfraBidHash000000000000000000000000000001",
+        "submittedAt": "2026-05-18T14:23:00Z",
+        "price": 4750000,
+        "scores": { "price":85, "financial":78, "experience":82, "performance":74, "technical":80, "compliance":90, "proposal":70 },
+        "totalScore": 81.6,
+        "status": "winner",
+        "documents": [{ "name":"Technical Proposal", "ipfsHash":"QmInfraDoc1" }, { "name":"Financial Bid","ipfsHash":"QmInfraDoc2" }]
+      },
+      {
+        "bidderId": "VEN-002",
+        "companyName": "BuildRight Constructions",
+        "walletAddress": "0xBbCcDd11223344556677889900BbCcDd11223344",
+        "bidHash": "QmBuildRightBidHash00000000000000000000000002",
+        "submittedAt": "2026-05-18T15:10:00Z",
+        "price": 4850000,
+        "scores": { "price":80, "financial":75, "experience":80, "performance":72, "technical":78, "compliance":85, "proposal":68 },
+        "totalScore": 78.9,
+        "status": "evaluated",
+        "documents": [{ "name":"Tech","ipfsHash":"QmBRDoc1" }]
+      },
+      {
+        "bidderId": "VEN-003",
+        "companyName": "Skyline Engineers",
+        "walletAddress": "0xCcDdEe22334455667788990011CcDdEe22334455",
+        "bidHash": "QmSkylineBidHash0000000000000000000000000003",
+        "submittedAt": "2026-05-19T09:05:00Z",
+        "price": 4900000,
+        "scores": { "price":78, "financial":70, "experience":76, "performance":70, "technical":75, "compliance":80, "proposal":65 },
+        "totalScore": 75.8,
+        "status": "evaluated",
+        "documents": [{ "name":"Tech","ipfsHash":"QmSkyDoc1" }]
+      },
+      {
+        "bidderId": "VEN-004",
+        "companyName": "Faulty Works",
+        "walletAddress": "0xDdEeFf33445566778899001122DdEeFf33445566",
+        "bidHash": "QmFaultyBidHash0000000000000000000000000004",
+        "submittedAt": "2026-05-19T12:30:00Z",
+        "price": 4700000,
+        "scores": null,
+        "totalScore": null,
+        "status": "disqualified",
+        "disqualificationReason": "GST certificate expired",
+        "documents": []
+      }
+    ]
+  },
   "TC-MH-2024-883": [
     {
       "bidderId": "vendor-001",

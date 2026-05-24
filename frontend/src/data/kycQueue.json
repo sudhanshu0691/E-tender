@@ -1,98 +1,152 @@
 [
   {
-    "vendorId": "vendor-001",
+    "id": "VEN-001",
+    "vendorId": "VEN-001",
     "companyName": "Apex Infra Solutions",
-    "orgType": "Private Limited",
-    "kycLevel": "pending",
-    "submittedAt": "2026-05-18T07:20:00Z",
-    "daysWaiting": 2,
-    "docs": [
-      { "name": "Certificate of Incorporation", "ipfsHash": "ipfs://QmApexIncorp001" },
-      { "name": "GST Certificate", "ipfsHash": "ipfs://QmApexGST002" }
-    ]
-  },
-  {
-    "vendorId": "vendor-002",
-    "companyName": "Shakti Buildcon",
-    "orgType": "LLP",
-    "kycLevel": "under-review",
-    "submittedAt": "2026-05-17T11:15:00Z",
-    "daysWaiting": 3,
-    "docs": [
-      { "name": "PAN", "ipfsHash": "ipfs://QmShaktiPAN003" },
-      { "name": "Bank Letter", "ipfsHash": "ipfs://QmShaktiBank004" }
-    ]
-  },
-  {
-    "vendorId": "vendor-003",
-    "companyName": "Sudarshan Engineering Works",
-    "orgType": "Private Limited",
-    "kycLevel": "pending",
-    "submittedAt": "2026-05-16T09:40:00Z",
-    "daysWaiting": 4,
-    "docs": [
-      { "name": "Udyam Certificate", "ipfsHash": "ipfs://QmSudarshanUdyam005" },
-      { "name": "ISO 9001", "ipfsHash": "ipfs://QmSudarshanISO006" }
-    ]
-  },
-  {
-    "vendorId": "vendor-004",
-    "companyName": "Narmada Logistics",
-    "orgType": "Partnership",
-    "kycLevel": "under-review",
-    "submittedAt": "2026-05-15T12:10:00Z",
-    "daysWaiting": 5,
-    "docs": [
-      { "name": "GST Certificate", "ipfsHash": "ipfs://QmNarmadaGST007" },
-      { "name": "Cancelled Cheque", "ipfsHash": "ipfs://QmNarmadaCheque008" }
-    ]
-  },
-  {
-    "vendorId": "vendor-005",
-    "companyName": "BlueStone Fabricators",
-    "orgType": "Private Limited",
-    "kycLevel": "pending",
-    "submittedAt": "2026-05-14T14:05:00Z",
-    "daysWaiting": 6,
-    "docs": [
-      { "name": "Board Resolution", "ipfsHash": "ipfs://QmBlueStoneBoard009" },
-      { "name": "PAN", "ipfsHash": "ipfs://QmBlueStonePAN010" }
-    ]
-  },
-  {
-    "vendorId": "vendor-006",
-    "companyName": "Sangam Green Energy",
-    "orgType": "Private Limited",
-    "kycLevel": "under-review",
-    "submittedAt": "2026-05-13T10:00:00Z",
-    "daysWaiting": 7,
-    "docs": [
-      { "name": "Incorporation Certificate", "ipfsHash": "ipfs://QmSangamIncorp011" },
-      { "name": "MSME Certificate", "ipfsHash": "ipfs://QmSangamMSME012" }
-    ]
-  },
-  {
-    "vendorId": "vendor-007",
-    "companyName": "Lotus ITS India",
-    "orgType": "LLP",
-    "kycLevel": "pending",
-    "submittedAt": "2026-05-12T08:00:00Z",
-    "daysWaiting": 8,
-    "docs": [
-      { "name": "GST Certificate", "ipfsHash": "ipfs://QmLotusGST013" },
-      { "name": "DSC Certificate", "ipfsHash": "ipfs://QmLotusDSC014" }
-    ]
-  },
-  {
-    "vendorId": "vendor-008",
-    "companyName": "Paramount Civil Works",
-    "orgType": "Proprietorship",
-    "kycLevel": "under-review",
-    "submittedAt": "2026-05-11T16:45:00Z",
+    "ownerName": "Vikram Singh",
+    "email": "contact@apexinfra.in",
+    "phone": "+91-9876543210",
+    "orgType": "Pvt Ltd",
+    "gstin": "27ABCDE1234F1Z5",
+    "walletAddress": "0xAaBbCcDdEeFf00112233445566778899AaBbCcDd",
+    "submittedDate": "2026-05-15T10:12:00Z",
+    "submittedAt": "2026-05-15T10:12:00Z",
+    "kycLevel": "Level 0",
+    "kycStatus": "pending",
     "daysWaiting": 9,
+    "msmeCategory": "Micro",
+    "udyamNumber": "UDYAM-MP-12-0034521",
+    "isMSME": true,
+    "state": "Madhya Pradesh",
+    "city": "Indore",
+    "annualTurnover": 4100000,
+    "documents": [
+      { "name": "Aadhaar", "type": "identity", "ipfsHash": "QmAbcdef1234567890abcdefghijklmnopqrstuvwx1", "uploadDate": "2026-05-14T09:00:00Z", "expiryDate": null, "status": "verified" },
+      { "name": "PAN", "type": "identity", "ipfsHash": "QmPanHash1234567890abcdefghijklmnopqrstuvwx2", "uploadDate": "2026-05-14T09:10:00Z", "expiryDate": null, "status": "verified" },
+      { "name": "GST Certificate", "type": "registration", "ipfsHash": "QmGstHash1234567890abcdefghijklmnopqrstuvwx3", "uploadDate": "2026-05-14T09:20:00Z", "expiryDate": null, "status": "pending" },
+      { "name": "Work Order", "type": "experience", "ipfsHash": "QmWorkHash1234567890abcdefghijklmnopqrstuvwx4", "uploadDate": "2026-05-14T09:30:00Z", "expiryDate": null, "status": "verified" }
+    ],
+    "annualTurnoverHistory": [2500000, 3200000, 4100000],
     "docs": [
-      { "name": "PAN", "ipfsHash": "ipfs://QmParamountPAN015" },
-      { "name": "Address Proof", "ipfsHash": "ipfs://QmParamountAddress016" }
+      { "name": "GST Certificate", "type": "registration", "ipfsHash": "QmGstHash1234567890abcdefghijklmnopqrstuvwx3" }
     ]
+  },
+  {
+    "id": "VEN-002",
+    "vendorId": "VEN-002",
+    "companyName": "GreenBuild Contractors",
+    "ownerName": "Meera Rao",
+    "email": "hello@greenbuild.in",
+    "phone": "+91-9123456780",
+    "orgType": "Partnership",
+    "gstin": null,
+    "walletAddress": "0xBbCcDdEeFfAa11223344556677889900BbCcDDEe",
+    "submittedDate": "2026-05-16T11:20:00Z",
+    "submittedAt": "2026-05-16T11:20:00Z",
+    "kycLevel": "Level 1",
+    "kycStatus": "under-review",
+    "daysWaiting": 8,
+    "msmeCategory": null,
+    "udyamNumber": null,
+    "isMSME": false,
+    "state": "Karnataka",
+    "city": "Bengaluru",
+    "annualTurnover": 7500000,
+    "documents": [
+      { "name": "Aadhaar", "type": "identity", "ipfsHash": "QmGaa1b2c3d4e5f67890123456789abcdefghi5", "uploadDate": "2026-05-15T10:00:00Z", "expiryDate": null, "status": "verified" },
+      { "name": "PAN", "type": "identity", "ipfsHash": "QmPan2Hash234567890abcdefabcdefabcdefa6", "uploadDate": "2026-05-15T10:05:00Z", "expiryDate": null, "status": "verified" },
+      { "name": "GST Certificate", "type": "registration", "ipfsHash": "QmGst2Hash234567890abcdefabcdefabcdefa7", "uploadDate": "2026-05-15T10:15:00Z", "expiryDate": null, "status": "pending" }
+    ],
+    "annualTurnoverHistory": [5000000, 6200000, 7500000],
+    "docs": [
+      { "name": "GST Certificate", "type": "registration", "ipfsHash": "QmGst2Hash234567890abcdefabcdefabcdefa7" }
+    ]
+  },
+  {
+    "id": "VEN-003",
+    "vendorId": "VEN-003",
+    "companyName": "Sunrise Electricals",
+    "ownerName": "Arjun Mehta",
+    "email": "arjun@sunriseel.com",
+    "phone": "+91-9988776655",
+    "orgType": "Proprietorship",
+    "gstin": "27GHIJKL9876F1Z9",
+    "walletAddress": "0xCcDdEeFfAaBb22334455667788990011CcDdEEff",
+    "submittedDate": "2026-05-16T12:00:00Z",
+    "submittedAt": "2026-05-16T12:00:00Z",
+    "kycLevel": "Level 0",
+    "kycStatus": "pending",
+    "daysWaiting": 8,
+    "msmeCategory": "Small",
+    "udyamNumber": "UDYAM-MH-09-0039902",
+    "isMSME": true,
+    "state": "Maharashtra",
+    "city": "Mumbai",
+    "annualTurnover": 1800000,
+    "documents": [
+      { "name": "Aadhaar", "type": "identity", "ipfsHash": "QmAad3Hash34567890abcdefabcdefabcdefa8", "uploadDate": "2026-05-15T11:00:00Z", "expiryDate": null, "status": "verified" },
+      { "name": "PAN", "type": "identity", "ipfsHash": "QmPan3Hash34567890abcdefabcdefabcdefa9", "uploadDate": "2026-05-15T11:10:00Z", "expiryDate": null, "status": "verified" },
+      { "name": "Work Order", "type": "experience", "ipfsHash": "QmWork3Hash34567890abcdefabcdefabcdefb0", "uploadDate": "2026-05-15T11:30:00Z", "expiryDate": null, "status": "rejected", "rejectionReason": "Blurry document scan" }
+    ],
+    "annualTurnoverHistory": [1200000, 1500000, 1800000],
+    "docs": [
+      { "name": "Work Order", "type": "experience", "ipfsHash": "QmWork3Hash34567890abcdefabcdefabcdefb0" }
+    ]
+  },
+  {
+    "id": "VEN-004",
+    "vendorId": "VEN-004",
+    "companyName": "Metro Supplies",
+    "ownerName": "Rita Verma",
+    "email": "rita@metrosupplies.in",
+    "phone": "+91-9111222333",
+    "orgType": "Proprietorship",
+    "gstin": "29MNOPQ1234F1Z2",
+    "walletAddress": "0xDdEeFfAaBbCc33445566778899001122DdEeFF00",
+    "submittedDate": "2026-05-17T09:45:00Z",
+    "submittedAt": "2026-05-17T09:45:00Z",
+    "kycLevel": "Level 2",
+    "kycStatus": "under-review",
+    "daysWaiting": 7,
+    "msmeCategory": null,
+    "udyamNumber": null,
+    "isMSME": false,
+    "state": "Karnataka",
+    "city": "Mysuru",
+    "annualTurnover": 4000000,
+    "documents": [
+      { "name": "Aadhaar", "type": "identity", "ipfsHash": "QmAad4Hash4567890abcdefabcdefabcdefb1", "uploadDate": "2026-05-16T09:00:00Z", "expiryDate": null, "status": "verified" },
+      { "name": "PAN", "type": "identity", "ipfsHash": "QmPan4Hash4567890abcdefabcdefabcdefb2", "uploadDate": "2026-05-16T09:10:00Z", "expiryDate": null, "status": "verified" }
+    ],
+    "annualTurnoverHistory": [3000000, 3500000, 4000000],
+    "docs": []
+  },
+  {
+    "id": "VEN-005",
+    "vendorId": "VEN-005",
+    "companyName": "Oceanic Builders",
+    "ownerName": "Sandeep Rao",
+    "email": "sandeep@oceanic.in",
+    "phone": "+91-9001122334",
+    "orgType": "LLP",
+    "gstin": "33QRSTU5678F1Z3",
+    "walletAddress": "0xEeFfAaBbCcDd44556677889900112233EeFfAA11",
+    "submittedDate": "2026-05-17T10:30:00Z",
+    "submittedAt": "2026-05-17T10:30:00Z",
+    "kycLevel": "Level 1",
+    "kycStatus": "pending",
+    "daysWaiting": 7,
+    "msmeCategory": null,
+    "udyamNumber": null,
+    "isMSME": false,
+    "state": "Tamil Nadu",
+    "city": "Chennai",
+    "annualTurnover": 6000000,
+    "documents": [
+      { "name": "Aadhaar", "type": "identity", "ipfsHash": "QmAad5Hash567890abcdefabcdefabcdefb3", "uploadDate": "2026-05-16T10:00:00Z", "expiryDate": null, "status": "verified" },
+      { "name": "PAN", "type": "identity", "ipfsHash": "QmPan5Hash567890abcdefabcdefabcdefb4", "uploadDate": "2026-05-16T10:10:00Z", "expiryDate": null, "status": "pending" }
+    ],
+    "annualTurnoverHistory": [4500000, 5200000, 6000000],
+    "docs": []
   }
 ]

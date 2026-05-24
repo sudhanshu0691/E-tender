@@ -208,7 +208,7 @@ export default function Home() {
                       {tender.status}
                     </Badge>
                   </div>
-                  <CardTitle className="text-lg line-clamp-2 leading-tight">{tender.title}</CardTitle>
+                  <CardTitle className="text-lg line-clamp-2 leading-tight">{tender.tenderTitle}</CardTitle>
                   <CardDescription className="text-sm font-medium text-gray-600">{tender.department}</CardDescription>
                 </CardHeader>
                 <CardContent className="flex-grow">

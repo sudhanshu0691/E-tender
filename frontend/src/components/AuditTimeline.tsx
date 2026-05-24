@@ -38,3 +38,5 @@ export function AuditTimeline({ events }: { events: AuditEvent[] }) {
     </div>
   )
 }
+
+export default AuditTimeline

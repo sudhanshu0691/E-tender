@@ -13,7 +13,7 @@ export default function TendersPage() {
   const [searchTerm, setSearchTerm] = useState("")
   
   const filteredTenders = tendersData.filter(t => 
-    t.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
+    t.tenderTitle.toLowerCase().includes(searchTerm.toLowerCase()) || 
     t.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
     t.department.toLowerCase().includes(searchTerm.toLowerCase())
   )
@@ -134,7 +134,7 @@ export default function TendersPage() {
                         <div>
                           <Link href={`/tenders/${tender.id}`}>
                             <h3 className="text-xl font-bold text-[#0B3D91] hover:underline leading-tight">
-                              {tender.title}
+                              {tender.tenderTitle}
                             </h3>
                           </Link>
                           <p className="text-sm text-gray-600 mt-1">{tender.department}</p>

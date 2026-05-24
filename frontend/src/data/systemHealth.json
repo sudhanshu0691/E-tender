@@ -1,27 +1,14 @@
 {
-  "blockchain": {
-    "status": "green",
-    "latency": 124,
-    "blockHeight": 7842631,
-    "network": "Sepolia",
-    "lastBlock": "2026-05-22T11:08:00Z"
+  "services": {
+    "ipfs": { "status": "ok", "lastChecked": "2026-05-21T08:00:00Z", "endpoint": "https://ipfs.infura.io:5001" },
+    "blockchainNode": { "status": "ok", "lastChecked": "2026-05-21T08:01:00Z", "network": "sepolia", "rpc": "https://sepolia.infura.io/v3/PROJECT_ID" },
+    "kycService": { "status": "ok", "lastChecked": "2026-05-21T07:58:00Z" },
+    "emailService": { "status": "degraded", "lastChecked": "2026-05-21T07:50:00Z", "pendingQueue": 23 }
   },
-  "ipfs": {
-    "status": "green",
-    "latency": 102,
-    "gateway": "pinata",
-    "uptime": 99.95
-  },
-  "database": {
-    "status": "green",
-    "latency": 18,
-    "operational": true,
-    "queryCount": 12450
-  },
-  "smartContract": {
-    "status": "green",
-    "address": "0x1a2b3c4d5e6f7g8h9i0j1k2l3m4n5o6p7q8r9s0t",
-    "verified": true,
-    "etherscanUrl": "https://sepolia.etherscan.io/address/0x1a2b3c4d5e6f7g8h9i0j1k2l3m4n5o6p7q8r9s0t"
+  "metrics": {
+    "pendingKYC": 5,
+    "activeTenders": 32,
+    "totalVendors": 1012,
+    "averageBidResponseTimeSeconds": 12.4
   }
 }

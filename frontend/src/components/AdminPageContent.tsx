@@ -66,7 +66,7 @@ export function AdminPageContent({ page = "dashboard" }: AdminPageContentProps) 
   if (page === "tenders") {
     const filteredTenders = tenders.filter(
       (t) =>
-        t.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        t.tenderTitle.toLowerCase().includes(searchQuery.toLowerCase()) ||
         t.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
         t.department.toLowerCase().includes(searchQuery.toLowerCase())
     )

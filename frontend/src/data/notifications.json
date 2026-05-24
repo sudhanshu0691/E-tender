@@ -1,0 +1,10 @@
+[
+  { "id":"N-001","type":"tender","title":"New Tender Published","message":"Road Construction — Indore Ring Road has been published.","timestamp":"2026-05-21T08:00:00Z","read":false,"tenderId":"TND-2026-002" },
+  { "id":"N-002","type":"bid","title":"Bid Deadline in 24 Hours","message":"Your bid for Smart City CCTV expires tomorrow at 5:00 PM.","timestamp":"2026-05-21T09:00:00Z","read":false,"tenderId":"TND-2026-010" },
+  { "id":"N-003","type":"kyc","title":"KYC Document Rejected","message":"Your ISO Certificate was rejected: please upload a valid copy.","timestamp":"2026-05-20T14:00:00Z","read":false,"tenderId":null },
+  { "id":"N-004","type":"bid","title":"Winner Declared","message":"TenderChain Hospital Equipment: you placed #2 with score 78.4.","timestamp":"2026-05-19T18:00:00Z","read":true,"tenderId":"TND-2026-005" },
+  { "id":"N-005","type":"tender","title":"Pre-bid Meeting Tomorrow","message":"IT Infrastructure Upgrade: pre-bid at 11 AM via video call.","timestamp":"2026-05-21T07:30:00Z","read":false,"tenderId":"TND-2026-011" },
+  { "id":"N-006","type":"kyc","title":"KYC Level Upgraded","message":"Congratulations! Your KYC has been upgraded to Level 3 Full KYC.","timestamp":"2026-05-18T12:00:00Z","read":true,"tenderId":null },
+  { "id":"N-007","type":"system","title":"Smart Contract Updated","message":"TenderChain.sol v2.1 deployed to Sepolia testnet.","timestamp":"2026-05-10T08:30:00Z","read":true,"tenderId":null },
+  { "id":"N-008","type":"bid","title":"Bid Submitted Successfully","message":"Your encrypted bid for Solar Panel Supply has been recorded on-chain.","timestamp":"2026-05-17T13:00:00Z","read":true,"tenderId":"TND-2026-003" }
+]

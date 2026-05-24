@@ -1,9 +1,10 @@
 "use client"
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { useEffect, useMemo, useState } from "react"
 import Link from "next/link"
 import { useParams } from "next/navigation"
-import { ArrowLeft, ChevronRight, Clock3, FileText, Gavel } from "lucide-react"
+import { ArrowLeft, Clock3, FileText, Gavel } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -11,17 +12,21 @@ import { BlockchainTxModal } from "@/components/BlockchainTxModal"
 import { WinnerBanner } from "@/components/WinnerBanner"
 import { AuditTimeline } from "@/components/AuditTimeline"
 import { EncryptedBidBadge } from "@/components/EncryptedBidBadge"
-import { IPFSHashPill } from "@/components/IPFSHashPill"
+import IPFSHashPill from "@/components/IPFSHashPill"
 import tendersData from "@/data/tenders.json"
 import tenderBidsData from "@/data/tenderBids.json"
 import auditEventsData from "@/data/auditEvents.json"
 
 type TenderBid = {
   bidderId: string
+  companyName?: string
   walletAddress: string
   submittedAt: string
   encrypted: boolean
-  price: number
+  disqualified?: boolean
+  bidAmount?: number
+  price?: number
+  totalScore?: number
   scores: Record<string, number>
 }
 
@@ -53,6 +58,12 @@ const scoreWeights = {
   proposal: 5,
 }
 
+const statusStyles: Record<string, string> = {
+  Open: "bg-emerald-100 text-emerald-800 border-emerald-200",
+  Closed: "bg-slate-100 text-slate-700 border-slate-200",
+  Awarded: "bg-[#138808]/10 text-[#138808] border-[#138808]/20",
+}
+
 function truncateWallet(wallet: string) {
   return `${wallet.slice(0, 8)}…${wallet.slice(-6)}`
 }
@@ -67,10 +78,17 @@ function calculateTotal(scores: Record<string, number | null>) {
 export default function AdminTenderPage() {
   const params = useParams<{ id: string }>()
   const tenderId = Array.isArray(params.id) ? params.id[0] : params.id
-  const tender = tendersData.find((item) => item.id === tenderId) ?? tendersData[0]
-  const bids = useMemo(() => (tenderBidsData as Record<string, TenderBid[]>)[tender.id] ?? [], [tender.id])
-  const auditEvents = useMemo(() => (auditEventsData as Record<string, AuditEvent[]>)[tender.id] ?? [], [tender.id])
-  const deadlinePassed = Boolean(tender.deadlinePassed)
+
+  const tender = useMemo(() => {
+    return (
+      (tendersData as any[]).find((item) => item.id === tenderId) ??
+      (tendersData as any[])[0]
+    )
+  }, [tenderId])
+
+  const rawBids = ((tenderBidsData as Record<string, any>)[tender.id] ?? []) as TenderBid[]
+  const auditEvents = ((auditEventsData as Record<string, any>)[tender.id] ?? []) as AuditEvent[]
+  const deadlinePassed = Boolean((tender as any).deadlinePassed)
 
   const [activeTab, setActiveTab] = useState<"bids" | "audit" | "info">("bids")
   const [scoreMap, setScoreMap] = useState<Record<string, Record<string, number | null>>>({})
@@ -78,47 +96,26 @@ export default function AdminTenderPage() {
   const [winner, setWinner] = useState<{ name: string; score: number } | null>(null)
 
   useEffect(() => {
-    const initialScores = bids.reduce((accumulator, bid) => {
+    const initialScores = rawBids.reduce((accumulator, bid) => {
       accumulator[bid.bidderId] = scoreFields.reduce(
         (scoreAccumulator, field) => ({
           ...scoreAccumulator,
-          [field.key]: bid.scores?.[field.key] > 0 ? bid.scores[field.key] : null,
+          [field.key]: bid.scores?.[field.key] ?? null,
         }),
-        {},
+        {} as Record<string, number | null>,
       )
       return accumulator
     }, {} as Record<string, Record<string, number | null>>)
 
     setScoreMap(initialScores)
     setWinner(null)
-  }, [bids, tender.id])
+  }, [rawBids, tender.id])
 
-  const budgetRange =
-    {
-      "TC-MH-2024-883": "₹ 4,200 Cr - ₹ 4,500 Cr",
-      "TC-DL-2024-102": "₹ 110 Cr - ₹ 125 Cr",
-      "TC-RJ-2024-405": "₹ 1,950 Cr - ₹ 2,100 Cr",
-    }[tender.id] ?? tender.budget
+  const budgetRange = (tender as any).budget ?? "N/A"
+  const documentHash = (tender as any).hash ?? (tender as any).ipfsHash ?? "ipfs://unknown"
+  const countdownLabel = deadlinePassed ? "Deadline passed" : "Open for bidding"
 
-  const documentHash =
-    {
-      "TC-MH-2024-883": "ipfs://QmTenderSpec883",
-      "TC-DL-2024-102": "ipfs://QmTenderSpec102",
-      "TC-RJ-2024-405": "ipfs://QmTenderSpec405",
-    }[tender.id] ?? tender.hash
-
-  const countdownLabel =
-    {
-      "TC-MH-2024-883": "14d 05h 23m",
-      "TC-DL-2024-102": "Deadline passed",
-      "TC-RJ-2024-405": "Deadline passed",
-    }[tender.id] ?? (deadlinePassed ? "Deadline passed" : "Open for bidding")
-
-  const allScoresFilled = bids.every((bid) =>
-    scoreFields.every((field) => scoreMap[bid.bidderId]?.[field.key] !== null),
-  )
-
-  const bidResults = bids.map((bid) => {
+  const bidResults = rawBids.map((bid) => {
     const scores = scoreMap[bid.bidderId] ?? {}
     return {
       ...bid,
@@ -126,6 +123,10 @@ export default function AdminTenderPage() {
       total: calculateTotal(scores),
     }
   })
+
+  const allScoresFilled = rawBids.every((bid) =>
+    scoreFields.every((field) => scoreMap[bid.bidderId]?.[field.key] !== null),
+  )
 
   const handleScoreChange = (bidderId: string, fieldKey: string, value: string) => {
     setScoreMap((current) => ({
@@ -142,18 +143,26 @@ export default function AdminTenderPage() {
   }
 
   const handleWinnerDeclared = () => {
-    const topBid = bidResults.reduce(
-      (best, current) => (current.total > best.total ? current : best),
-      bidResults[0],
-    )
-    setWinner({ name: topBid?.bidderId ?? "Winner", score: topBid?.total ?? 0 })
+    const topBid = bidResults.reduce((best, current) => (current.total > best.total ? current : best), bidResults[0])
+    setWinner({ name: topBid?.companyName ?? "Winner", score: topBid?.total ?? 0 })
     setTxOpen(false)
   }
 
-  const statusStyles: Record<string, string> = {
-    Open: "bg-emerald-100 text-emerald-800 border-emerald-200",
-    Closed: "bg-slate-100 text-slate-700 border-slate-200",
-    Awarded: "bg-[#138808]/10 text-[#138808] border-[#138808]/20",
+  if (!tender) {
+    return (
+      <div className="min-h-screen bg-slate-50 p-6">
+        <div className="mx-auto max-w-4xl">
+          <Link href="/admin" className="inline-flex items-center gap-2 text-teal-600 hover:text-teal-700 mb-8 font-medium">
+            <ArrowLeft className="h-4 w-4" />
+            Back to Dashboard
+          </Link>
+          <div className="text-center py-12">
+            <p className="text-2xl font-bold mb-2">Tender not found</p>
+            <p className="text-slate-600">The requested tender ID is missing from the dataset.</p>
+          </div>
+        </div>
+      </div>
+    )
   }
 
   return (
@@ -173,14 +182,14 @@ export default function AdminTenderPage() {
             <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
               <div className="space-y-4">
                 <div className="flex flex-wrap items-center gap-2">
-                  <Badge variant="outline" className={statusStyles[tender.status] ?? "bg-slate-100 text-slate-700 border-slate-200"}>
-                    {tender.status}
+                  <Badge variant="outline" className={statusStyles[(tender as any).status] ?? "bg-slate-100 text-slate-700 border-slate-200"}>
+                    {(tender as any).status}
                   </Badge>
-                  <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-mono text-slate-600">{tender.id}</span>
+                  <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-mono text-slate-600">{(tender as any).id}</span>
                 </div>
                 <div>
-                  <h1 className="text-3xl font-bold text-slate-950 md:text-4xl">{tender.title}</h1>
-                  <p className="mt-2 max-w-3xl text-sm text-slate-600">{tender.department}</p>
+                  <h1 className="text-3xl font-bold text-slate-950 md:text-4xl">{(tender as any).tenderTitle ?? (tender as any).title}</h1>
+                  <p className="mt-2 max-w-3xl text-sm text-slate-600">{(tender as any).department}</p>
                 </div>
                 <div className="flex flex-wrap items-center gap-3 text-sm text-slate-600">
                   <span className="inline-flex items-center gap-2 rounded-full bg-slate-100 px-3 py-1.5">
@@ -201,7 +210,7 @@ export default function AdminTenderPage() {
               <div className="flex flex-col gap-3 lg:items-end">
                 <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-600">
                   <p className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-400">Tender budget</p>
-                  <p className="mt-2 text-xl font-bold text-slate-950">{tender.budget}</p>
+                  <p className="mt-2 text-xl font-bold text-slate-950">{(tender as any).budget}</p>
                 </div>
                 {deadlinePassed && activeTab === "bids" ? (
                   <Button disabled={!allScoresFilled || Boolean(winner)} onClick={declareWinner} className="bg-[#138808] hover:bg-[#0f6b06]">
@@ -254,7 +263,7 @@ export default function AdminTenderPage() {
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-100">
-                      {bids.map((bid) => (
+                      {rawBids.map((bid) => (
                         <tr key={bid.bidderId} className="hover:bg-slate-50/70">
                           <td className="px-5 py-4 font-mono text-slate-700">{truncateWallet(bid.walletAddress)}</td>
                           <td className="px-5 py-4 text-slate-600">{new Date(bid.submittedAt).toLocaleString("en-IN")}</td>
@@ -283,7 +292,7 @@ export default function AdminTenderPage() {
                           </div>
                           <div className="rounded-2xl bg-slate-50 px-4 py-3 text-sm text-slate-600">
                             <p className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-400">Bid price</p>
-                            <p className="mt-1 font-mono text-base font-semibold text-slate-950">₹ {Number(bid.price).toLocaleString("en-IN")}</p>
+                            <p className="mt-1 font-mono text-base font-semibold text-slate-950">₹ {Number(bid.price ?? bid.bidAmount ?? 0).toLocaleString("en-IN")}</p>
                           </div>
                         </div>
 
@@ -316,7 +325,7 @@ export default function AdminTenderPage() {
                       {allScoresFilled ? "All bid scores are filled and the winner can be declared." : "Complete every score field before declaring the winner."}
                     </p>
                     <Button disabled={!allScoresFilled || Boolean(winner)} onClick={declareWinner} className="bg-[#138808] hover:bg-[#0f6b06]">
-                      Declare Winner <ChevronRight className="ml-2 h-4 w-4" />
+                      Declare Winner
                     </Button>
                   </div>
                 </div>
@@ -345,14 +354,14 @@ export default function AdminTenderPage() {
             </CardHeader>
             <CardContent className="grid gap-4 p-6 lg:grid-cols-2 lg:p-8">
               {[
-                { label: "Tender ID", value: tender.id },
-                { label: "Department", value: tender.department },
-                { label: "Category", value: tender.category },
-                { label: "State", value: tender.state },
-                { label: "Budget", value: tender.budget },
-                { label: "Status", value: tender.status },
-                { label: "Deadline", value: new Date(tender.deadline).toLocaleString("en-IN") },
-                { label: "Bids Received", value: String(tender.bidsReceived) },
+                { label: "Tender ID", value: (tender as any).id },
+                { label: "Department", value: (tender as any).department },
+                { label: "Category", value: (tender as any).category },
+                { label: "State", value: (tender as any).state },
+                { label: "Budget", value: (tender as any).budget },
+                { label: "Status", value: (tender as any).status },
+                { label: "Deadline", value: new Date((tender as any).deadline).toLocaleString("en-IN") },
+                { label: "Bids Received", value: String(rawBids.length) },
               ].map((item) => (
                 <div key={item.label} className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
                   <p className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-400">{item.label}</p>

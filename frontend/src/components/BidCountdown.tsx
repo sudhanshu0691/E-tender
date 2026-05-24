@@ -83,3 +83,5 @@ export function BidCountdown({ deadline, onExpired }: BidCountdownProps) {
     </div>
   )
 }
+
+export default BidCountdown

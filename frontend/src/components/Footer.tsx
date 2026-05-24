@@ -39,6 +39,7 @@ export default function Footer() {
               <li><Link href="/" className="hover:text-white hover:underline">Home</Link></li>
               <li><Link href="/tenders" className="hover:text-white hover:underline">Live Tenders</Link></li>
               <li><Link href="/ledger" className="hover:text-white hover:underline">Transparency Ledger</Link></li>
+              <li><Link href="/public-analytics" className="hover:text-white hover:underline">Public Analytics</Link></li>
               <li><Link href="/about" className="hover:text-white hover:underline">About Us</Link></li>
             </ul>
           </div>
@@ -49,7 +50,7 @@ export default function Footer() {
               <li><Link href="/register" className="hover:text-white hover:underline">Register as Vendor</Link></li>
               <li><Link href="/how-it-works" className="hover:text-white hover:underline">How It Works</Link></li>
               <li><Link href="/login" className="hover:text-white hover:underline">Vendor Login</Link></li>
-              <li><Link href="#" className="hover:text-white hover:underline">e-KYC Process</Link></li>
+              <li><Link href="/vendor-portal-information" className="hover:text-white hover:underline">Vendor Portal Information</Link></li>
             </ul>
           </div>
 

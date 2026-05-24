@@ -52,3 +52,5 @@ export function WinnerBanner({ winnerName, score }: WinnerBannerProps) {
     </motion.div>
   )
 }
+
+export default WinnerBanner

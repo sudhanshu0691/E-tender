@@ -35,3 +35,5 @@ export function IPFSHashPill({ hash }: { hash: string }) {
     </div>
   )
 }
+
+export default IPFSHashPill

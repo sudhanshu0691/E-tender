@@ -1,44 +1,105 @@
 [
   {
-    "id": "TC-MH-2024-883",
-    "title": "Construction of 4-Lane Highway from Pune to Nashik",
+    "id": "TNDR-2026-001",
+    "tenderTitle": "Construction of 4-Lane Highway from Pune to Nashik",
+    "nitNo": "MH/PWD/2026/NIT/883",
     "department": "Ministry of Road Transport and Highways",
-    "budget": "₹ 4,500 Cr",
-    "deadline": "2024-12-15T23:59:59Z",
+    "budget": 450000000000,
+    "emrAmount": 9000000000,
+    "deadline": "2026-06-15T23:59:59Z",
+    "bidOpeningDate": "2026-06-20T15:00:00Z",
     "status": "Open",
     "category": "Infrastructure",
     "state": "Maharashtra",
     "verified": true,
     "bidsReceived": 12,
     "hash": "0x8f3c...4a12",
-    "deadlinePassed": false
+    "deadlinePassed": false,
+    "ipfsDocuments": [
+      { "name": "NIT Document", "type": "nit", "ipfsHash": "QmNIT123..." },
+      { "name": "Technical Specification", "type": "techSpec", "ipfsHash": "QmTech456..." },
+      { "name": "BOQ", "type": "boq", "ipfsHash": "QmBOQ789..." }
+    ],
+    "evaluationWeights": {
+      "price": 0.40,
+      "financial": 0.15,
+      "experience": 0.15,
+      "performance": 0.10,
+      "technical": 0.10,
+      "compliance": 0.05,
+      "proposal": 0.05
+    },
+    "corrigendums": [
+      { "id": "corr-001", "date": "2026-05-10T10:00:00Z", "description": "Clarification on EMD", "ipfsHash": "QmCORR001..." }
+    ],
+    "winnerDeclaredAt": null
   },
   {
-    "id": "TC-DL-2024-102",
-    "title": "Supply of Medical Equipment for AIIMS Delhi Extension",
+    "id": "TNDR-2026-002",
+    "tenderTitle": "Supply of Medical Equipment for AIIMS Delhi Extension",
+    "nitNo": "DL/MOH/2026/NIT/102",
     "department": "Ministry of Health and Family Welfare",
-    "budget": "₹ 120 Cr",
-    "deadline": "2024-11-30T23:59:59Z",
+    "budget": 12000000000,
+    "emrAmount": 240000000,
+    "deadline": "2026-05-30T23:59:59Z",
+    "bidOpeningDate": "2026-06-05T15:00:00Z",
     "status": "Closed",
     "category": "Healthcare",
     "state": "Delhi",
     "verified": true,
     "bidsReceived": 45,
     "hash": "0x2a1b...9c3d",
-    "deadlinePassed": true
+    "deadlinePassed": true,
+    "ipfsDocuments": [
+      { "name": "NIT Document", "type": "nit", "ipfsHash": "QmNIT234..." },
+      { "name": "Technical Specification", "type": "techSpec", "ipfsHash": "QmTech567..." },
+      { "name": "Equipment List", "type": "boq", "ipfsHash": "QmEQP890..." }
+    ],
+    "evaluationWeights": {
+      "price": 0.40,
+      "financial": 0.15,
+      "experience": 0.15,
+      "performance": 0.10,
+      "technical": 0.10,
+      "compliance": 0.05,
+      "proposal": 0.05
+    },
+    "corrigendums": [],
+    "winnerDeclaredAt": "2026-05-20T10:00:00Z"
   },
   {
-    "id": "TC-RJ-2024-405",
-    "title": "Installation of 500MW Solar Park in Jaisalmer",
+    "id": "TNDR-2026-003",
+    "tenderTitle": "Installation of 500MW Solar Park in Jaisalmer",
+    "nitNo": "RJ/MNRE/2026/NIT/405",
     "department": "Ministry of New and Renewable Energy",
-    "budget": "₹ 2,100 Cr",
-    "deadline": "2024-11-20T23:59:59Z",
+    "budget": 210000000000,
+    "emrAmount": 4200000000,
+    "deadline": "2026-05-20T23:59:59Z",
+    "bidOpeningDate": "2026-05-25T15:00:00Z",
     "status": "Awarded",
     "category": "Energy",
     "state": "Rajasthan",
     "verified": true,
     "bidsReceived": 8,
     "hash": "0x7d4e...1b9f",
-    "deadlinePassed": true
+    "deadlinePassed": true,
+    "ipfsDocuments": [
+      { "name": "NIT Document", "type": "nit", "ipfsHash": "QmNIT345..." },
+      { "name": "Technical Specification", "type": "techSpec", "ipfsHash": "QmTech678..." },
+      { "name": "Environmental Report", "type": "other", "ipfsHash": "QmENV901..." }
+    ],
+    "evaluationWeights": {
+      "price": 0.40,
+      "financial": 0.15,
+      "experience": 0.15,
+      "performance": 0.10,
+      "technical": 0.10,
+      "compliance": 0.05,
+      "proposal": 0.05
+    },
+    "corrigendums": [
+      { "id": "corr-001", "date": "2026-05-05T10:00:00Z", "description": "Amendment to technical requirements", "ipfsHash": "QmCORR002..." }
+    ],
+    "winnerDeclaredAt": "2026-05-18T14:30:00Z"
   }
 ]

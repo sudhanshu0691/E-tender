@@ -148,3 +148,5 @@ export function BlockchainTxModal({ open, title, actionLabel, onComplete, onClos
     </AnimatePresence>
   )
 }
+
+export default BlockchainTxModal

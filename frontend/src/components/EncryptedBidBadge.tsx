@@ -11,3 +11,5 @@ export function EncryptedBidBadge() {
     </span>
   )
 }
+
+export default EncryptedBidBadge

@@ -1,208 +1,247 @@
-"use client"
+'use client'
 
-import Link from "next/link"
-import { ShieldCheck, Clock, Download, ArrowLeft, Building2, MapPin, Copy, CheckCircle2, FileText, Lock, Blocks } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import tendersData from "@/data/tenders.json"
+import { useState } from 'react'
+import Link from 'next/link'
+import { ArrowLeft, AlertTriangle, Clock, FileText, Users, BarChart3, Gavel, CheckCircle2 } from 'lucide-react'
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import { Badge } from '@/components/ui/badge'
+import { AuditTimeline } from '@/components/AuditTimeline'
+import { BidCountdown } from '@/components/BidCountdown'
+import IPFSHashPill from '@/components/IPFSHashPill'
+import tendersData from '@/data/tenders.json'
+import tenderBidsData from '@/data/tenderBids.json'
+import auditEventsData from '@/data/auditEvents.json'
 
-export default function TenderDetail({ params }: { params: { id: string } }) {
-  const tender = tendersData.find(t => t.id === params.id) || tendersData[0]
+export default function PublicTenderDetailPage({ params }: { params: { id: string } }) {
+  const { id } = params
+  const tender = (tendersData as any).find((t: any) => t.id === id)
+  const bidsData = (tenderBidsData as any)[id]
+  const auditEvents = (auditEventsData as any)[id] || []
+
+  const [showRaiseDispute, setShowRaiseDispute] = useState(false)
+
+  if (!tender) {
+    return (
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 p-6">
+        <div className="max-w-4xl mx-auto">
+          <Link href="/tenders" className="inline-flex items-center gap-2 text-teal-600 hover:text-teal-700 mb-8">
+            <ArrowLeft className="h-4 w-4" />
+            Back to Tenders
+          </Link>
+          <div className="text-center py-12">
+            <AlertTriangle className="h-16 w-16 text-amber-500 mx-auto mb-4" />
+            <h2 className="text-2xl font-bold mb-2">Tender Not Found</h2>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  const winnerBid = bidsData?.bids?.find((b: any) => b.isWinner)
+  const totalBids = bidsData?.bids?.length || 0
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      {/* Breadcrumb */}
-      <div className="mb-6 flex items-center space-x-2 text-sm text-gray-500">
-        <Link href="/tenders" className="flex items-center hover:text-[#0B3D91]">
-          <ArrowLeft className="mr-1 h-4 w-4" />
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-900 p-6">
+      <div className="max-w-5xl mx-auto">
+        <Link href="/tenders" className="inline-flex items-center gap-2 text-teal-600 hover:text-teal-700 mb-8 font-medium">
+          <ArrowLeft className="h-4 w-4" />
           Back to Tenders
         </Link>
-        <span>/</span>
-        <span className="text-gray-900 font-medium truncate">{tender.id}</span>
-      </div>
 
-      {/* Header Section */}
-      <div className="bg-white rounded-lg border border-gray-200 shadow-sm p-6 mb-8">
-        <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-4">
-          <div className="space-y-4 flex-grow">
-            <div className="flex items-center space-x-3">
-              <span className="text-sm font-mono font-bold text-gray-500 bg-gray-100 px-2 py-1 rounded">{tender.id}</span>
-              <Badge variant={tender.status === 'Open' ? 'default' : tender.status === 'Closed' ? 'destructive' : 'success'}>
-                {tender.status}
-              </Badge>
+        {/* Header */}
+        <div className="mb-8">
+          <div className="flex items-start justify-between gap-4 mb-4">
+            <div>
+              <h1 className="text-3xl font-bold mb-2">{tender.tenderTitle}</h1>
+              <p className="text-slate-600 dark:text-slate-300">NIT: {tender.nitNo}</p>
             </div>
-            
-            <h1 className="font-poppins text-2xl md:text-3xl font-bold text-[#0B3D91] leading-tight">
-              {tender.title}
-            </h1>
-            
-            <div className="flex flex-wrap gap-4 text-sm text-gray-600">
-              <div className="flex items-center">
-                <Building2 className="mr-2 h-4 w-4 text-gray-400" />
-                {tender.department}
-              </div>
-              <div className="flex items-center">
-                <MapPin className="mr-2 h-4 w-4 text-gray-400" />
-                {tender.state}
-              </div>
-            </div>
-          </div>
-          
-          <div className="flex flex-col items-end gap-2 min-w-[200px]">
-            <Link href={`/ledger?search=${tender.hash}`}>
-              <Button variant="outline" className="w-full border-[#138808] text-[#138808] hover:bg-[#138808]/10">
-                <ShieldCheck className="mr-2 h-4 w-4" />
-                View on Blockchain
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Left Column - Details */}
-        <div className="lg:col-span-2 space-y-8">
-          {/* Tabs Navigation (Visual only for mockup) */}
-          <div className="border-b border-gray-200 flex space-x-8">
-            <button className="border-b-2 border-[#0B3D91] pb-3 text-sm font-medium text-[#0B3D91]">Overview</button>
-            <button className="border-b-2 border-transparent pb-3 text-sm font-medium text-gray-500 hover:text-gray-700">Documents</button>
-            <button className="border-b-2 border-transparent pb-3 text-sm font-medium text-gray-500 hover:text-gray-700">Audit Trail</button>
-            <button className="border-b-2 border-transparent pb-3 text-sm font-medium text-gray-500 hover:text-gray-700">Bidders (Hash)</button>
+            <Badge
+              className={`${
+                tender.status === 'Open'
+                  ? 'bg-green-100 text-green-800'
+                  : tender.status === 'Closed'
+                    ? 'bg-amber-100 text-amber-800'
+                    : 'bg-purple-100 text-purple-800'
+              }`}
+            >
+              {tender.status}
+            </Badge>
           </div>
 
-          <div className="space-y-6">
-            <section>
-              <h3 className="font-poppins font-semibold text-lg mb-3">Scope of Work</h3>
-              <div className="bg-white p-5 rounded-md border border-gray-200 text-sm text-gray-700 space-y-4">
-                <p>The {tender.department} invites encrypted electronic bids for the {tender.title}. This project involves end-to-end execution including design, procurement, and implementation.</p>
-                <p>All bids must be submitted through the TenderChain platform and will be locked in the Smart Contract until the official bid opening time.</p>
-              </div>
-            </section>
-
-            <section>
-              <h3 className="font-poppins font-semibold text-lg mb-3">Eligibility Criteria</h3>
-              <ul className="list-disc pl-5 space-y-2 text-sm text-gray-700 bg-white p-5 rounded-md border border-gray-200">
-                <li>Must be a registered vendor on TenderChain with verified e-KYC.</li>
-                <li>Minimum average annual turnover of ₹ 50 Cr in the last 3 financial years.</li>
-                <li>ISO 9001:2015 Certification mandatory.</li>
-                <li>No prior blacklisting by any Central/State Government department.</li>
-              </ul>
-            </section>
-
-            <section>
-              <h3 className="font-poppins font-semibold text-lg mb-3">Tender Documents</h3>
-              <div className="space-y-3">
-                {[
-                  { name: "Notice Inviting Tender (NIT)", size: "2.4 MB" },
-                  { name: "Technical Specifications", size: "5.1 MB" },
-                  { name: "Financial Bid Format (BoQ)", size: "1.2 MB" }
-                ].map((doc, i) => (
-                  <div key={i} className="flex items-center justify-between bg-white p-4 rounded-md border border-gray-200">
-                    <div className="flex items-center space-x-3">
-                      <FileText className="h-6 w-6 text-gray-400" />
-                      <div>
-                        <p className="text-sm font-medium text-gray-900">{doc.name}.pdf</p>
-                        <p className="text-xs text-gray-500">{doc.size} • SHA256 Verified</p>
-                      </div>
-                    </div>
-                    <Button variant="ghost" size="sm" className="text-[#0B3D91]">
-                      <Download className="h-4 w-4 mr-1" /> Download
-                    </Button>
-                  </div>
-                ))}
-              </div>
-            </section>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            <Card>
+              <CardContent className="pt-6">
+                <p className="text-xs text-slate-600 dark:text-slate-400 mb-1">Budget</p>
+                <p className="text-2xl font-bold">₹ {(tender.budget / 10000000).toFixed(1)} Cr</p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardContent className="pt-6">
+                <p className="text-xs text-slate-600 dark:text-slate-400 mb-1">Bids Received</p>
+                <p className="text-2xl font-bold">{totalBids}</p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardContent className="pt-6">
+                <p className="text-xs text-slate-600 dark:text-slate-400 mb-1">EMR Amount</p>
+                <p className="text-2xl font-bold">₹ {(tender.emrAmount / 10000000).toFixed(2)} Cr</p>
+              </CardContent>
+            </Card>
           </div>
+
+          {!bidsData?.deadlinePassed && <BidCountdown deadline={tender.deadline} />}
         </div>
 
-        {/* Right Column - Key Info & Actions */}
-        <div className="space-y-6">
-          <Card className="border-[#0B3D91]/20 shadow-md">
-            <CardHeader className="bg-[#0B3D91]/5 pb-4 border-b border-[#0B3D91]/10">
-              <CardTitle className="text-lg">Key Information</CardTitle>
-            </CardHeader>
-            <CardContent className="pt-6 space-y-5">
-              <div>
-                <p className="text-xs text-gray-500 uppercase font-semibold">Estimated Budget</p>
-                <p className="text-xl font-bold text-gray-900">{tender.budget}</p>
-              </div>
-              <div className="grid grid-cols-2 gap-4">
+        {/* Winner Card */}
+        {winnerBid && (
+          <Card className="mb-8 border-green-200 bg-green-50 dark:border-green-900 dark:bg-green-900/20">
+            <CardContent className="p-6">
+              <div className="flex items-center gap-4">
+                <CheckCircle2 className="h-8 w-8 text-green-600 flex-shrink-0" />
                 <div>
-                  <p className="text-xs text-gray-500 uppercase font-semibold">EMD Amount</p>
-                  <p className="font-medium">₹ 5,00,000</p>
+                  <p className="font-semibold text-green-900 dark:text-green-300 mb-1">Winner Declared</p>
+                  <p className="text-green-800 dark:text-green-400">
+                    <span className="font-bold">{winnerBid.companyName}</span> with a score of{' '}
+                    <span className="font-bold">{winnerBid.totalScore.toFixed(2)}/100</span>
+                  </p>
                 </div>
-                <div>
-                  <p className="text-xs text-gray-500 uppercase font-semibold">Tender Fee</p>
-                  <p className="font-medium">₹ 5,000</p>
-                </div>
-              </div>
-              
-              <div className="bg-red-50 p-3 rounded-md border border-red-100 flex items-start space-x-3">
-                <Clock className="h-5 w-5 text-red-600 mt-0.5" />
-                <div>
-                  <p className="text-xs text-red-800 uppercase font-semibold">Bid Deadline</p>
-                  <p className="font-bold text-red-600">{new Date(tender.deadline).toLocaleString()}</p>
-                  <p className="text-xs text-red-600 mt-1">Countdown: 14d 05h 23m</p>
-                </div>
-              </div>
-
-              <div>
-                <p className="text-xs text-gray-500 uppercase font-semibold mb-1">Bids Received (Encrypted)</p>
-                <div className="flex items-center justify-between bg-gray-50 px-3 py-2 rounded border border-gray-200">
-                  <span className="font-bold text-lg">{tender.bidsReceived}</span>
-                  <Lock className="h-4 w-4 text-gray-400" />
-                </div>
-              </div>
-
-              <div className="pt-4 border-t border-gray-200">
-                <Link href="/dashboard" className="w-full">
-                  <Button className="w-full bg-[#0B3D91] hover:bg-[#0B3D91]/90 h-12 text-lg">
-                    Submit Bid
-                  </Button>
-                </Link>
-                <p className="text-center text-xs text-gray-500 mt-2 flex items-center justify-center">
-                  <ShieldCheck className="h-3 w-3 mr-1" />
-                  Requires Wallet Signature
-                </p>
               </div>
             </CardContent>
           </Card>
+        )}
 
-          {/* Blockchain Proof Card */}
-          <Card className="border-[#138808]/30 bg-green-50/30">
-            <CardHeader className="pb-3">
-              <CardTitle className="text-sm font-poppins flex items-center text-[#138808]">
-                <Blocks className="mr-2 h-4 w-4" />
-                Blockchain Proof
+        {/* Tender Documents */}
+        <Card className="mb-8">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <FileText className="h-5 w-5" />
+              Tender Documents
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-2">
+              {tender.ipfsDocuments?.map((doc: any) => (
+                <div key={doc.ipfsHash} className="p-3 border rounded-lg flex items-center justify-between hover:bg-slate-50 dark:hover:bg-slate-800">
+                  <div className="flex items-center gap-3">
+                    <FileText className="h-5 w-5 text-blue-600" />
+                    <div>
+                      <p className="font-medium">{doc.name}</p>
+                      <p className="text-xs text-slate-500">{doc.type}</p>
+                    </div>
+                  </div>
+                  <div>
+                    <IPFSHashPill hash={doc.ipfsHash} showLink={true} />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Evaluation Criteria */}
+        <Card className="mb-8">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <BarChart3 className="h-5 w-5" />
+              Evaluation Criteria
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="p-4 bg-slate-50 dark:bg-slate-800 rounded-lg">
+                <p className="text-sm text-slate-600 dark:text-slate-400">Price</p>
+                <p className="text-2xl font-bold">{(tender.evaluationWeights.price * 100).toFixed(0)}%</p>
+              </div>
+              <div className="p-4 bg-slate-50 dark:bg-slate-800 rounded-lg">
+                <p className="text-sm text-slate-600 dark:text-slate-400">Financial</p>
+                <p className="text-2xl font-bold">{(tender.evaluationWeights.financial * 100).toFixed(0)}%</p>
+              </div>
+              <div className="p-4 bg-slate-50 dark:bg-slate-800 rounded-lg">
+                <p className="text-sm text-slate-600 dark:text-slate-400">Experience</p>
+                <p className="text-2xl font-bold">{(tender.evaluationWeights.experience * 100).toFixed(0)}%</p>
+              </div>
+              <div className="p-4 bg-slate-50 dark:bg-slate-800 rounded-lg">
+                <p className="text-sm text-slate-600 dark:text-slate-400">Technical</p>
+                <p className="text-2xl font-bold">{(tender.evaluationWeights.technical * 100).toFixed(0)}%</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Bid Scorecards */}
+        {winnerBid && (
+          <Card className="mb-8">
+            <CardHeader>
+              <CardTitle>Bid Evaluation Results</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead className="bg-slate-100 dark:bg-slate-800">
+                    <tr>
+                      <th className="px-4 py-2 text-left">Company</th>
+                      <th className="px-4 py-2 text-right">Price Score</th>
+                      <th className="px-4 py-2 text-right">Financial</th>
+                      <th className="px-4 py-2 text-right">Experience</th>
+                      <th className="px-4 py-2 text-right">Total Score</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {bidsData?.bids?.map((bid: any) => (
+                      <tr key={bid.bidderId} className={bid.isWinner ? 'bg-green-50 dark:bg-green-900/20 font-bold' : ''}>
+                        <td className="px-4 py-3">{bid.companyName}</td>
+                        <td className="px-4 py-3 text-right">{bid.scores.price}</td>
+                        <td className="px-4 py-3 text-right">{bid.scores.financial}</td>
+                        <td className="px-4 py-3 text-right">{bid.scores.experience}</td>
+                        <td className="px-4 py-3 text-right text-teal-600">{bid.totalScore.toFixed(2)} {bid.isWinner && '🏆'}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Audit Timeline */}
+        <Card className="mb-8">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Clock className="h-5 w-5" />
+              Blockchain Audit Trail
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            {auditEvents.length > 0 ? (
+              <AuditTimeline events={auditEvents} />
+            ) : (
+              <p className="text-slate-500">No events recorded yet.</p>
+            )}
+          </CardContent>
+        </Card>
+
+        {/* Raise Dispute */}
+        {tender.status !== 'Open' && (
+          <Card className="border-amber-200">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Gavel className="h-5 w-5" />
+                Dispute or Appeal
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-3 text-xs">
-              <div>
-                <p className="text-gray-500 mb-1">Transaction Hash</p>
-                <div className="flex items-center justify-between bg-white px-2 py-1.5 rounded border border-gray-200 font-mono text-gray-600">
-                  <span className="truncate">{tender.hash}</span>
-                  <button className="text-gray-400 hover:text-[#0B3D91] ml-2"><Copy className="h-3 w-3" /></button>
-                </div>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-500">Block Number</span>
-                <span className="font-mono font-medium">14589201</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-500">Smart Contract</span>
-                <span className="font-mono font-medium text-[#0B3D91] hover:underline cursor-pointer">0xTender...Reg</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-500">Timestamp</span>
-                <span className="font-mono">{new Date().toISOString()}</span>
-              </div>
-              <div className="mt-2 text-center text-[#138808] font-medium flex items-center justify-center">
-                <CheckCircle2 className="h-3 w-3 mr-1" /> Immutably Recorded
-              </div>
+            <CardContent>
+              <p className="text-sm text-slate-600 dark:text-slate-300 mb-4">
+                If you believe the evaluation or bidding process was conducted incorrectly, you may file a dispute.
+              </p>
+              <Link href={`/dispute/${id}`}>
+                <Button className="bg-amber-600 text-white hover:bg-amber-700">
+                  Raise Dispute
+                </Button>
+              </Link>
             </CardContent>
           </Card>
-        </div>
+        )}
       </div>
     </div>
   )

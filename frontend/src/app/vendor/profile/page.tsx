@@ -1,186 +1,243 @@
 "use client"
 
+import { useState } from "react"
 import Link from "next/link"
-import { ArrowLeft, CheckCircle2, XCircle, Clock, Wallet, Upload, FileText, Link as LinkIcon, ShieldAlert } from "lucide-react"
+import { ArrowLeft, Building2, FileText, Wallet, CheckCircle2, Clock, ShieldCheck } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
 
-export default function VendorProfile() {
+const kycLevels = [
+  { level: 1, name: "Basic Verification", desc: "PAN, Company Incorporation", status: "completed" },
+  { level: 2, name: "Financial Verification", desc: "Bank Accounts, ITR", status: "completed" },
+  { level: 3, name: "Operational Verification", desc: "Factory Inspection, Certifications", status: "in-progress" },
+  { level: 4, name: "Performance History", desc: "Previous Projects, References", status: "pending" },
+]
+
+const vendorData = {
+  id: "VND-2026-001",
+  companyName: "Sharma Construction Pvt Ltd",
+  gstin: "23AABCS1429B1ZB",
+  pan: "AABCS1429B",
+  registrationNumber: "CIR-001234/2015",
+  website: "www.sharmaconstruction.in",
+  email: "contact@sharmaconstruction.in",
+  phone: "+91 9876543210",
+  city: "Indore",
+  state: "Madhya Pradesh",
+  pinCode: "452001",
+  officeAddress: "123 Construction Complex, Indore",
+  factoryAddress: "Plot 42, Industrial Estate, Indore",
+  ownerName: "Rajendra Sharma",
+  ownerEmail: "rajendra@sharmaconstruction.in",
+  walletAddress: "0xabc...def",
+  registeredAt: "2026-05-15T10:30:00Z",
+  kycStatus: "under-review",
+  kycLevel: 3,
+}
+
+const documents = [
+  { name: "GST Certificate", hash: "QmGST123...", uploadedAt: "2026-05-15" },
+  { name: "PAN Card", hash: "QmPAN456...", uploadedAt: "2026-05-15" },
+  { name: "Udyam Certificate", hash: "QmUDY789...", uploadedAt: "2026-05-16" },
+  { name: "ITR FY24-25", hash: "QmITR012...", uploadedAt: "2026-05-16" },
+  { name: "Bank Statement", hash: "QmBNK345...", uploadedAt: "2026-05-17" },
+  { name: "ISO 9001 Certificate", hash: "QmISO678...", uploadedAt: "2026-05-17" },
+]
+
+const pastProjects = [
+  { name: "Highway Construction - NH-52", value: "45 Cr", status: "Completed", year: "2024" },
+  { name: "Bridge Construction - River Project", value: "28 Cr", status: "Completed", year: "2023" },
+  { name: "Water Facility Project", value: "12 Cr", status: "Completed", year: "2022" },
+]
+
+export default function VendorProfilePage() {
+  const [activeTab, setActiveTab] = useState<"overview" | "kyc" | "documents">("overview")
+
   return (
-    <div className="min-h-screen bg-[#F8F9FC] py-8">
-      <div className="container mx-auto px-4 max-w-5xl">
-        <div className="mb-6 flex items-center space-x-2 text-sm text-gray-500">
-          <Link href="/dashboard" className="flex items-center hover:text-[#0B3D91]">
-            <ArrowLeft className="mr-1 h-4 w-4" />
-            Back to Dashboard
-          </Link>
-          <span>/</span>
-          <span className="text-gray-900 font-medium">KYC & Profile Vault</span>
-        </div>
+    <div className="min-h-screen bg-slate-50 p-6">
+      <div className="mx-auto max-w-6xl">
+        <Link href="/vendor" className="mb-8 inline-flex items-center gap-2 font-medium text-teal-600 hover:text-teal-700">
+          <ArrowLeft className="h-4 w-4" />
+          Back to Dashboard
+        </Link>
 
-        <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
+        <div className="mb-8 flex flex-col gap-4 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm md:flex-row md:items-start md:justify-between">
           <div>
-            <div className="flex items-center space-x-3 mb-2">
-              <h1 className="font-poppins text-3xl font-bold text-gray-900">Demo Infra Pvt Ltd</h1>
-              <Badge className="bg-[#0B3D91]">MSME Certified</Badge>
+            <div className="flex flex-wrap items-center gap-3">
+              <h1 className="text-3xl font-bold text-slate-950">{vendorData.companyName}</h1>
+              <Badge className="bg-blue-100 text-blue-800">{vendorData.id}</Badge>
+              <Badge className="bg-amber-100 text-amber-800">KYC Level {vendorData.kycLevel}/4</Badge>
+              <Badge className="bg-blue-100 text-blue-800">
+                {vendorData.kycStatus === "under-review" ? "Under Review" : "Approved"}
+              </Badge>
             </div>
-            <p className="text-gray-600 flex items-center text-sm">
-              <Wallet className="w-4 h-4 mr-2" />
-              Connected Wallet: <span className="font-mono ml-1 text-gray-900 font-medium">0x7F8E...2C3d</span>
-            </p>
+            <p className="mt-3 text-sm text-slate-600">Registered on {new Date(vendorData.registeredAt).toLocaleDateString("en-IN")}</p>
           </div>
-          <div className="bg-green-50 border border-green-200 px-4 py-3 rounded-lg flex items-center space-x-3">
-            <div className="bg-green-100 p-2 rounded-full">
-              <CheckCircle2 className="w-6 h-6 text-green-600" />
-            </div>
-            <div>
-              <p className="text-xs text-green-800 font-bold uppercase">KYC Status</p>
-              <p className="text-sm font-medium text-green-900">Fully Verified</p>
-            </div>
-          </div>
+
+          <Card className="border-slate-200">
+            <CardContent className="p-4">
+              <div className="flex items-center gap-3">
+                <Wallet className="h-5 w-5 text-teal-600" />
+                <div>
+                  <p className="text-xs text-slate-600">Wallet Address</p>
+                  <p className="font-mono text-sm font-semibold">{vendorData.walletAddress}</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* KYC Status Stepper */}
-          <div className="lg:col-span-1 space-y-6">
+        <div className="mb-8 flex gap-3 border-b border-slate-200 pb-2">
+          {([
+            ["overview", "Company Overview"],
+            ["kyc", "KYC Status"],
+            ["documents", "Documents"],
+          ] as const).map(([tab, label]) => (
+            <button
+              key={tab}
+              type="button"
+              onClick={() => setActiveTab(tab)}
+              className={`rounded-xl px-4 py-2 text-sm font-semibold transition ${activeTab === tab ? "bg-[#0B3D91] text-white" : "text-slate-600 hover:bg-white"}`}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+
+        {activeTab === "overview" ? (
+          <div className="space-y-6">
             <Card>
               <CardHeader>
-                <CardTitle className="text-lg">Verification Steps</CardTitle>
-                <CardDescription>Status of your on-chain identity verification.</CardDescription>
+                <CardTitle className="flex items-center gap-2">
+                  <Building2 className="h-5 w-5" />
+                  Company Information
+                </CardTitle>
+                <CardDescription>Verified legal and contact details for this vendor.</CardDescription>
               </CardHeader>
-              <CardContent className="space-y-6">
-                <div className="flex space-x-4 relative">
-                  <div className="absolute top-8 bottom-0 left-[11px] w-0.5 bg-gray-200"></div>
-                  
-                  <div className="relative z-10 flex flex-col items-center">
-                    <div className="w-6 h-6 rounded-full bg-green-100 flex items-center justify-center border-2 border-white">
-                      <CheckCircle2 className="w-4 h-4 text-green-600" />
-                    </div>
+              <CardContent className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                {[
+                  ["GSTIN", vendorData.gstin],
+                  ["PAN", vendorData.pan],
+                  ["Registration Number", vendorData.registrationNumber],
+                  ["Website", vendorData.website],
+                  ["Email", vendorData.email],
+                  ["Phone", vendorData.phone],
+                  ["Office Address", vendorData.officeAddress],
+                  ["Factory Address", vendorData.factoryAddress],
+                ].map(([label, value]) => (
+                  <div key={label}>
+                    <label className="text-sm text-slate-600">{label}</label>
+                    <p className="font-medium text-slate-950">{value}</p>
                   </div>
-                  <div className="pb-6">
-                    <p className="font-medium text-gray-900 text-sm">Company Registration (MCA)</p>
-                    <p className="text-xs text-gray-500 mt-1">Verified via MCA API on 10 Oct 2024</p>
-                  </div>
-                </div>
-
-                <div className="flex space-x-4 relative">
-                  <div className="absolute top-8 bottom-0 left-[11px] w-0.5 bg-gray-200"></div>
-                  <div className="relative z-10 flex flex-col items-center">
-                    <div className="w-6 h-6 rounded-full bg-green-100 flex items-center justify-center border-2 border-white">
-                      <CheckCircle2 className="w-4 h-4 text-green-600" />
-                    </div>
-                  </div>
-                  <div className="pb-6">
-                    <p className="font-medium text-gray-900 text-sm">PAN/GST Verification</p>
-                    <p className="text-xs text-gray-500 mt-1">Matched with GSTIN 27ABCDE1234F1Z5</p>
-                  </div>
-                </div>
-
-                <div className="flex space-x-4 relative">
-                  <div className="absolute top-8 bottom-0 left-[11px] w-0.5 bg-gray-200"></div>
-                  <div className="relative z-10 flex flex-col items-center">
-                    <div className="w-6 h-6 rounded-full bg-yellow-100 flex items-center justify-center border-2 border-white">
-                      <Clock className="w-4 h-4 text-yellow-600" />
-                    </div>
-                  </div>
-                  <div className="pb-6">
-                    <p className="font-medium text-gray-900 text-sm">Bank Account Details</p>
-                    <p className="text-xs text-yellow-600 mt-1">Pending Nodal Officer Approval</p>
-                  </div>
-                </div>
-
-                <div className="flex space-x-4 relative">
-                  <div className="relative z-10 flex flex-col items-center">
-                    <div className="w-6 h-6 rounded-full bg-red-100 flex items-center justify-center border-2 border-white">
-                      <XCircle className="w-4 h-4 text-red-600" />
-                    </div>
-                  </div>
-                  <div>
-                    <p className="font-medium text-gray-900 text-sm">Digital Signature (DSC)</p>
-                    <p className="text-xs text-red-600 mt-1">Expired on 15 Oct 2024. Renewal required.</p>
-                  </div>
-                </div>
+                ))}
               </CardContent>
             </Card>
 
-            <Card className="bg-red-50 border-red-100">
-              <CardContent className="p-4 flex items-start space-x-3">
-                <ShieldAlert className="w-5 h-5 text-red-600 mt-0.5" />
-                <div>
-                  <h4 className="text-sm font-medium text-red-900">Action Required</h4>
-                  <p className="text-xs text-red-700 mt-1">Your Class 3 DSC has expired. You cannot submit new bids until it is updated.</p>
-                  <Button size="sm" variant="outline" className="mt-3 text-red-700 border-red-200 hover:bg-red-100 bg-white">
-                    Update DSC
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Document Vault */}
-          <div className="lg:col-span-2 space-y-6">
             <Card>
-              <CardHeader className="flex flex-row items-center justify-between">
-                <div>
-                  <CardTitle className="text-xl">Document Vault (IPFS)</CardTitle>
-                  <CardDescription>Your verified documents secured on decentralized storage.</CardDescription>
-                </div>
-                <Button className="bg-[#0B3D91] hover:bg-[#0B3D91]/90">
-                  <Upload className="w-4 h-4 mr-2" />
-                  Upload New
-                </Button>
+              <CardHeader>
+                <CardTitle>Authorized Representative</CardTitle>
               </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {[
-                    { name: "Certificate of Incorporation", type: "MCA PDF", hash: "QmYwAP...d3E1", status: "Active", date: "10 Oct 2024" },
-                    { name: "GST Registration Certificate", type: "Tax Doc", hash: "QmX8zP...b2R9", status: "Active", date: "10 Oct 2024" },
-                    { name: "MSME / Udyam Certificate", type: "Registration", hash: "QmK9wQ...c4T1", status: "Active", date: "11 Oct 2024" },
-                    { name: "Cancelled Cheque", type: "Bank Auth", hash: "QmM3eR...a5Y2", status: "Pending", date: "16 Oct 2024" },
-                    { name: "ISO 9001:2015 Certificate", type: "Compliance", hash: "QmN1bP...x7W3", status: "Expired", date: "01 Jan 2022" },
-                  ].map((doc, i) => (
-                    <div key={i} className={`p-4 border rounded-lg flex flex-col md:flex-row md:items-center justify-between ${doc.status === 'Expired' ? 'bg-gray-50 border-gray-200 opacity-70' : 'bg-white border-gray-200 hover:border-[#0B3D91]/30'} transition-colors`}>
-                      <div className="flex items-start space-x-3 mb-3 md:mb-0">
-                        <div className="bg-blue-50 p-2 rounded-md">
-                          <FileText className="w-6 h-6 text-[#0B3D91]" />
-                        </div>
-                        <div>
-                          <div className="flex items-center space-x-2">
-                            <h4 className="font-medium text-gray-900">{doc.name}</h4>
-                            <Badge variant="outline" className={`text-[10px] h-5 ${
-                              doc.status === 'Active' ? 'bg-green-50 text-green-700 border-green-200' : 
-                              doc.status === 'Pending' ? 'bg-yellow-50 text-yellow-700 border-yellow-200' : 
-                              'bg-red-50 text-red-700 border-red-200'
-                            }`}>
-                              {doc.status}
-                            </Badge>
-                          </div>
-                          <p className="text-xs text-gray-500 mt-1">{doc.type} • Uploaded {doc.date}</p>
-                          <div className="flex items-center mt-2 text-xs font-mono text-gray-400 bg-gray-50 px-2 py-1 rounded max-w-fit">
-                            <LinkIcon className="w-3 h-3 mr-1 text-[#0B3D91]" />
-                            ipfs://{doc.hash}
-                          </div>
-                        </div>
-                      </div>
-                      <div className="flex items-center space-x-2 w-full md:w-auto">
-                        {doc.status === 'Expired' ? (
-                          <Button size="sm" className="w-full md:w-auto bg-[#0B3D91]">
-                            <Upload className="w-4 h-4 mr-1" /> Re-upload
-                          </Button>
-                        ) : (
-                          <Button size="sm" variant="outline" className="w-full md:w-auto text-[#0B3D91]">
-                            View on IPFS
-                          </Button>
-                        )}
-                      </div>
-                    </div>
-                  ))}
+              <CardContent className="grid grid-cols-1 gap-4 md:grid-cols-3">
+                <div>
+                  <p className="text-sm text-slate-600">Name</p>
+                  <p className="font-semibold">{vendorData.ownerName}</p>
+                </div>
+                <div>
+                  <p className="text-sm text-slate-600">Email</p>
+                  <p>{vendorData.ownerEmail}</p>
+                </div>
+                <div>
+                  <p className="text-sm text-slate-600">Location</p>
+                  <p>{vendorData.city}, {vendorData.state}</p>
                 </div>
               </CardContent>
             </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Past Performance</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                {pastProjects.map((project) => (
+                  <div key={project.name} className="flex items-center justify-between rounded-xl border border-slate-200 p-4">
+                    <div>
+                      <p className="font-semibold text-slate-950">{project.name}</p>
+                      <p className="text-sm text-slate-600">{project.year}</p>
+                    </div>
+                    <div className="text-right">
+                      <p className="font-bold text-slate-950">₹ {project.value}</p>
+                      <Badge className="mt-1 bg-green-100 text-green-800">{project.status}</Badge>
+                    </div>
+                  </div>
+                ))}
+              </CardContent>
+            </Card>
           </div>
-        </div>
+        ) : null}
+
+        {activeTab === "kyc" ? (
+          <div className="space-y-6">
+            <Card className="border-blue-200 bg-blue-50">
+              <CardContent className="pt-6">
+                <p className="text-sm text-blue-900">
+                  Current KYC Level: <span className="font-bold">{vendorData.kycLevel} of 4</span>
+                </p>
+                <div className="mt-4 h-2 rounded-full bg-blue-200">
+                  <div className="h-2 rounded-full bg-blue-600" style={{ width: `${(vendorData.kycLevel / 4) * 100}%` }} />
+                </div>
+              </CardContent>
+            </Card>
+
+            <div className="space-y-3">
+              {kycLevels.map((level) => (
+                <Card key={level.level} className={level.level <= vendorData.kycLevel ? "border-emerald-200" : "border-slate-200"}>
+                  <CardContent className="flex items-start gap-3 p-5">
+                    <div className="mt-0.5 rounded-full bg-slate-100 p-2 text-slate-600">
+                      {level.status === "completed" ? <CheckCircle2 className="h-4 w-4 text-emerald-600" /> : level.status === "in-progress" ? <Clock className="h-4 w-4 text-amber-600" /> : <ShieldCheck className="h-4 w-4 text-slate-400" />}
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <p className="font-semibold text-slate-950">Level {level.level}: {level.name}</p>
+                        <Badge className={level.status === "completed" ? "bg-emerald-100 text-emerald-800" : level.status === "in-progress" ? "bg-amber-100 text-amber-800" : "bg-slate-100 text-slate-700"}>
+                          {level.status}
+                        </Badge>
+                      </div>
+                      <p className="mt-1 text-sm text-slate-600">{level.desc}</p>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+        ) : null}
+
+        {activeTab === "documents" ? (
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <FileText className="h-5 w-5" />
+                Document Vault
+              </CardTitle>
+              <CardDescription>Documents are stored with IPFS-style hashes for auditability.</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                {documents.map((doc) => (
+                  <div key={doc.hash} className="rounded-xl border border-slate-200 p-4">
+                    <div className="mb-3 flex items-start gap-3">
+                      <FileText className="h-5 w-5 flex-shrink-0 text-blue-600" />
+                      <div>
+                        <p className="font-semibold text-slate-950">{doc.name}</p>
+                        <p className="text-xs text-slate-500">Uploaded: {doc.uploadedAt}</p>
+                      </div>
+                    </div>
+                    <p className="font-mono text-xs text-slate-600">{doc.hash}</p>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        ) : null}
       </div>
     </div>
   )

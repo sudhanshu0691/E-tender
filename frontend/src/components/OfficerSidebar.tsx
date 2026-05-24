@@ -28,7 +28,7 @@ const navItems = [
   { icon: Scale, label: "Bid Evaluation", href: "/admin?page=bids", badge: null },
   { icon: MessageSquareWarning, label: "Dispute Management", href: "/admin?page=disputes", badge: null },
   { icon: BarChart3, label: "Reports", href: "/admin?page=reports", badge: null },
-  { icon: UserCog, label: "Officer Profile", href: "/admin?page=profile", badge: null },
+  { icon: UserCog, label: "Officer Profile", href: "/admin/profile", badge: null },
   { icon: Bell, label: "Notifications", href: "/admin?page=notifications", badge: 3 },
 ]
 

@@ -29,3 +29,5 @@ export function WeightSlider({ label, value, onChange, className }: WeightSlider
     </div>
   )
 }
+
+export default WeightSlider

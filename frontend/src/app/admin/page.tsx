@@ -2,8 +2,8 @@
 
 import { useEffect, useMemo, useState } from "react"
 import Link from "next/link"
-import { useSearchParams } from "next/navigation"
-import { AlertTriangle, ArrowRight, Blocks, Building2, CheckCircle2, Clock3, Database, FileText, Plus, Server, ShieldCheck, Users, XCircle } from "lucide-react"
+import { useRouter, useSearchParams } from "next/navigation"
+import { AlertTriangle, ArrowRight, Blocks, Building2, CheckCircle2, Clock3, FileText, Plus, Server, ShieldCheck, Users, XCircle } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -37,6 +37,7 @@ function formatDeadline(deadline: string) {
 }
 
 export default function AdminDashboardPage() {
+  const router = useRouter()
   const searchParams = useSearchParams()
   const currentPage = searchParams.get("page")
   const [queueItems, setQueueItems] = useState(kycQueueData.map((vendor) => ({ ...vendor })))
@@ -44,6 +45,11 @@ export default function AdminDashboardPage() {
 
   // Default dashboard view
   useEffect(() => {
+    if (currentPage === "profile") {
+      router.replace("/admin/profile")
+      return
+    }
+
     if (searchParams.get("published") !== "1") {
       return
     }
@@ -51,10 +57,25 @@ export default function AdminDashboardPage() {
     setShowToast(true)
     const timer = window.setTimeout(() => setShowToast(false), 4200)
     return () => window.clearTimeout(timer)
-  }, [searchParams])
+  }, [currentPage, router, searchParams])
 
   const totalTenders = tendersData.length
-  const activeBids = Object.values(tenderBidsData).reduce((total, bids) => total + bids.length, 0)
+  const activeBids = Object.values(tenderBidsData).reduce((total, bidEntry) => {
+    if (Array.isArray(bidEntry)) {
+      return total + bidEntry.length
+    }
+
+    if (
+      bidEntry &&
+      typeof bidEntry === "object" &&
+      "bids" in bidEntry &&
+      Array.isArray(bidEntry.bids)
+    ) {
+      return total + bidEntry.bids.length
+    }
+
+    return total
+  }, 0)
   const pendingKyc = queueItems.filter((vendor) => vendor.kycLevel === "pending").length
   const vendorsRegistered = vendorsData.length
 
@@ -171,15 +192,27 @@ export default function AdminDashboardPage() {
         </div>
 
         <div className="mb-8 grid grid-cols-1 gap-4 lg:grid-cols-4">
-          {Object.entries(systemHealthData).map(([service, details]) => {
+          {Object.entries(systemHealthData.services).map(([service, details]) => {
             const Icon =
-              service === "blockchain"
+              service === "blockchainNode"
                 ? Blocks
                 : service === "ipfs"
                   ? Server
-                  : service === "database"
-                    ? Database
-                    : AlertTriangle
+                  : service === "kycService"
+                    ? ShieldCheck
+                    : service === "emailService"
+                      ? FileText
+                      : AlertTriangle
+
+            const statusColor = details.status === "ok" ? "green" : details.status === "degraded" ? "yellow" : "red"
+            const displayText = 
+              service === "blockchainNode" 
+                ? `${details.network || "Unknown"} • ${details.rpc || "N/A"}`
+                : service === "ipfs"
+                  ? `${details.endpoint || "IPFS Gateway"} • Connected`
+                  : service === "kycService"
+                    ? "KYC Verification Service • Operational"
+                    : `Email Service • ${details.pendingQueue || 0} pending`
 
             return (
               <Card key={service} className="border-slate-200 shadow-sm">
@@ -191,30 +224,10 @@ export default function AdminDashboardPage() {
                       </div>
                       <div>
                         <p className="text-sm font-semibold text-slate-950 capitalize">{service.replace(/([A-Z])/g, " $1")}</p>
-                        <p className="text-xs text-slate-500">
-                          {service === "blockchain"
-                            ? (() => {
-                                const blockchainDetails = details as typeof systemHealthData.blockchain
-                                return `Block ${blockchainDetails.blockHeight} • ${blockchainDetails.latency}ms`
-                              })()
-                            : service === "ipfs"
-                              ? (() => {
-                                  const ipfsDetails = details as typeof systemHealthData.ipfs
-                                  return `${ipfsDetails.gateway} • ${ipfsDetails.latency}ms`
-                                })()
-                              : service === "database"
-                                ? (() => {
-                                    const databaseDetails = details as typeof systemHealthData.database
-                                    return `Operational • ${databaseDetails.latency}ms`
-                                  })()
-                                : (() => {
-                                    const smartContractDetails = details as typeof systemHealthData.smartContract
-                                    return `Verified • ${smartContractDetails.address.slice(0, 8)}...${smartContractDetails.address.slice(-6)}`
-                                  })()}
-                        </p>
+                        <p className="text-xs text-slate-500">{displayText}</p>
                       </div>
                     </div>
-                    <span className={`mt-1 h-3 w-3 rounded-full ${healthPalette[details.status] ?? "bg-slate-400"}`} />
+                    <span className={`mt-1 h-3 w-3 rounded-full ${healthPalette[statusColor] ?? "bg-slate-400"}`} />
                   </div>
                 </CardContent>
               </Card>
@@ -280,37 +293,29 @@ export default function AdminDashboardPage() {
               <CardDescription>Current state of platform services.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4 pt-6">
-              {Object.entries(systemHealthData).map(([service, details]) => (
-                <div key={service} className="rounded-2xl border border-slate-200 bg-slate-50/80 p-4">
-                  <div className="flex items-center justify-between gap-4">
-                    <div>
-                      <p className="text-sm font-semibold text-slate-900 capitalize">{service.replace(/([A-Z])/g, " $1")}</p>
-                      <p className="text-xs text-slate-500">
-                        {service === "blockchain"
-                          ? (() => {
-                              const blockchainDetails = details as typeof systemHealthData.blockchain
-                              return `Latency ${blockchainDetails.latency}ms`
-                            })()
-                          : service === "ipfs"
-                            ? (() => {
-                                const ipfsDetails = details as typeof systemHealthData.ipfs
-                                return `Latency ${ipfsDetails.latency}ms`
-                              })()
-                            : service === "database"
-                              ? (() => {
-                                  const databaseDetails = details as typeof systemHealthData.database
-                                  return `Latency ${databaseDetails.latency}ms`
-                                })()
-                              : (() => {
-                                  const smartContractDetails = details as typeof systemHealthData.smartContract
-                                  return `Verified • ${smartContractDetails.address.slice(0, 8)}...${smartContractDetails.address.slice(-6)}`
-                                })()}
-                      </p>
+              {Object.entries(systemHealthData.services).map(([service, details]) => {
+                const statusColor = details.status === "ok" ? "green" : details.status === "degraded" ? "yellow" : "red"
+                const displayText = 
+                  service === "blockchainNode" 
+                    ? `${details.network || "Unknown"} • Latency ${details.rpc ? "healthy" : "unknown"}`
+                    : service === "ipfs"
+                      ? `${details.endpoint || "IPFS Gateway"} • Connected`
+                      : service === "kycService"
+                        ? "KYC Service • Operational"
+                        : `Email Service • ${details.pendingQueue || 0} pending`
+                
+                return (
+                  <div key={service} className="rounded-2xl border border-slate-200 bg-slate-50/80 p-4">
+                    <div className="flex items-center justify-between gap-4">
+                      <div>
+                        <p className="text-sm font-semibold text-slate-900 capitalize">{service.replace(/([A-Z])/g, " $1")}</p>
+                        <p className="text-xs text-slate-500">{displayText}</p>
+                      </div>
+                      <span className={`h-3 w-3 rounded-full ${healthPalette[statusColor] ?? "bg-slate-400"}`} />
                     </div>
-                    <span className={`h-3 w-3 rounded-full ${healthPalette[details.status] ?? "bg-slate-400"}`} />
                   </div>
-                </div>
-              ))}
+                )
+              })}
             </CardContent>
           </Card>
         </div>
@@ -338,7 +343,7 @@ export default function AdminDashboardPage() {
                     <tr key={tender.id} className="hover:bg-slate-50/70">
                       <td className="px-6 py-4">
                         <div>
-                          <p className="font-semibold text-slate-950">{tender.title}</p>
+                          <p className="font-semibold text-slate-950">{tender.tenderTitle}</p>
                           <p className="mt-1 text-xs text-slate-500">{tender.department}</p>
                         </div>
                       </td>

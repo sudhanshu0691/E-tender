@@ -56,6 +56,9 @@ export default function Navbar() {
           <Link href="/tenders" className="text-sm font-medium text-gray-700 hover:text-[#0B3D91]">
             Tenders
           </Link>
+          <Link href="/public-analytics" className="text-sm font-medium text-gray-700 hover:text-[#0B3D91]">
+            Public Analytics
+          </Link>
           <Link href="/how-it-works" className="text-sm font-medium text-gray-700 hover:text-[#0B3D91]">
             How It Works
           </Link>

@@ -18,3 +18,5 @@ export function KYCStatusBadge({ status }: { status: KYCStatus }) {
     </Badge>
   )
 }
+
+export default KYCStatusBadge

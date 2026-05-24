@@ -1,4 +1,14 @@
 {
+  "TND-2026-001": [
+    { "id":"EVT-001","eventType":"TenderCreated","tenderId":"TND-2026-001","tenderTitle":"Smart City Road Infrastructure — Phase 2","actor":"0x3fA8C74b6e9D1234aBcD5678eF901234aBcD5678","timestamp":"2026-05-10T10:00:00Z","txHash":"0xabc123def4567890abcdefabcdefabcdefabcdefabcdefabcdefabcdefabcd","ipfsHash":"QmSpecDoc1234567890abcdef","description":"Tender published to blockchain by Rajesh Kumar Sharma" },
+    { "id":"EVT-002","eventType":"BidSubmitted","tenderId":"TND-2026-001","actor":"0xAbCdEf0011223344556677889900aAbCdEf0011","timestamp":"2026-05-18T14:23:00Z","ipfsHash":"QmBidHash1","description":"Bid submitted by Infra Build Pvt Ltd" },
+    { "id":"EVT-003","eventType":"BidSubmitted","tenderId":"TND-2026-001","actor":"0xBbCcDd11223344556677889900BbCcDd11223344","timestamp":"2026-05-18T15:10:00Z","ipfsHash":"QmBidHash2","description":"Bid submitted by BuildRight Constructions" },
+    { "id":"EVT-004","eventType":"BidSubmitted","tenderId":"TND-2026-001","actor":"0xCcDdEe22334455667788990011CcDdEe22334455","timestamp":"2026-05-19T09:05:00Z","ipfsHash":"QmBidHash3","description":"Bid submitted by Skyline Engineers" },
+    { "id":"EVT-005","eventType":"BidSubmitted","tenderId":"TND-2026-001","actor":"0xDdEeFf33445566778899001122DdEeFf33445566","timestamp":"2026-05-19T12:30:00Z","ipfsHash":"QmBidHash4","description":"Bid submitted by Faulty Works" },
+    { "id":"EVT-006","eventType":"BidRevealed","tenderId":"TND-2026-001","actor":"0x3fA8C74b6e9D1234aBcD5678eF901234aBcD5678","timestamp":"2026-05-20T17:00:00Z","txHash":"0xdef456abc1237890abcdefabcdefabcdefabcdefabcdefabcdefabcdefabcd","description":"Bids revealed by smart contract" },
+    { "id":"EVT-007","eventType":"WinnerDeclared","tenderId":"TND-2026-001","actor":"0x3fA8C74b6e9D1234aBcD5678eF901234aBcD5678","timestamp":"2026-05-20T19:00:00Z","txHash":"0xaaa111bbb222ccc333ddd444eee555fff666000111222333444555666777888","description":"Winner declared: Infra Build Pvt Ltd (score: 81.6/100)" },
+    { "id":"EVT-008","eventType":"DisputeFiled","tenderId":"TND-2026-001","actor":"0xBbCcDd11223344556677889900BbCcDd11223344","timestamp":"2026-05-21T09:30:00Z","description":"Dispute filed by BuildRight Constructions" }
+  ],
   "TC-MH-2024-883": [
     {
       "type": "Created",
