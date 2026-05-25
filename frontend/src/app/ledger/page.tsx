@@ -1,20 +1,55 @@
 "use client"
 
-import { useState } from "react"
-import { Search, Blocks, Activity, CheckCircle2, Copy, ArrowRightLeft } from "lucide-react"
+import { useMemo, useState } from "react"
+import Link from "next/link"
+import { Search, Blocks, Activity, CheckCircle2, Copy, ArrowRightLeft, Check } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import blockchainData from "@/data/blockchain.json"
 
+const ITEMS_PER_PAGE = 10
+
 export default function LedgerPage() {
   const [searchTerm, setSearchTerm] = useState("")
+  const [currentPage, setCurrentPage] = useState(1)
+  const [copiedHash, setCopiedHash] = useState<string | null>(null)
 
-  const filteredLogs = blockchainData.filter(log => 
-    log.txHash.toLowerCase().includes(searchTerm.toLowerCase()) || 
-    log.tenderId.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    log.event.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredLogs = useMemo(
+    () =>
+      blockchainData.filter(
+        (log) =>
+          log.txHash.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          log.tenderId.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          log.event.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          String(log.block).includes(searchTerm)
+      ),
+    [searchTerm]
   )
+
+  const totalPages = Math.max(1, Math.ceil(filteredLogs.length / ITEMS_PER_PAGE))
+  const safePage = Math.min(currentPage, totalPages)
+  const paginatedLogs = filteredLogs.slice(
+    (safePage - 1) * ITEMS_PER_PAGE,
+    safePage * ITEMS_PER_PAGE
+  )
+
+  const handleCopy = async (hash: string) => {
+    try {
+      await navigator.clipboard.writeText(hash)
+      setCopiedHash(hash)
+      setTimeout(() => setCopiedHash(null), 2000)
+    } catch {
+      const textarea = document.createElement("textarea")
+      textarea.value = hash
+      document.body.appendChild(textarea)
+      textarea.select()
+      document.execCommand("copy")
+      document.body.removeChild(textarea)
+      setCopiedHash(hash)
+      setTimeout(() => setCopiedHash(null), 2000)
+    }
+  }
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -36,9 +71,12 @@ export default function LedgerPage() {
               placeholder="Search by Tender ID, Tx Hash, Block #, or Vendor Hash..." 
               className="pl-12 h-14 text-base rounded-lg bg-white text-gray-900 border-none shadow-lg focus-visible:ring-[#FF9933]"
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={(e) => { setSearchTerm(e.target.value); setCurrentPage(1) }}
             />
-            <Button className="absolute right-2 top-2 h-10 bg-[#FF9933] hover:bg-[#FF9933]/90 text-white font-semibold">
+            <Button
+              className="absolute right-2 top-2 h-10 bg-[#FF9933] hover:bg-[#FF9933]/90 text-white font-semibold"
+              onClick={() => setCurrentPage(1)}
+            >
               Search Ledger
             </Button>
           </div>
@@ -72,7 +110,7 @@ export default function LedgerPage() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200">
-                  {filteredLogs.map((log, index) => (
+                  {paginatedLogs.map((log, index) => (
                     <tr key={index} className="hover:bg-gray-50 transition-colors">
                       <td className="px-6 py-4 font-mono font-medium text-[#0B3D91]">{log.block}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-gray-600">{new Date(log.timestamp).toLocaleString()}</td>
@@ -81,7 +119,17 @@ export default function LedgerPage() {
                       <td className="px-6 py-4">
                         <div className="flex items-center space-x-2">
                           <span className="font-mono text-gray-500 text-xs">{log.txHash}</span>
-                          <button className="text-gray-400 hover:text-[#0B3D91]"><Copy className="h-3 w-3" /></button>
+                          <button
+                            className="text-gray-400 hover:text-[#0B3D91] transition-colors"
+                            onClick={() => handleCopy(log.txHash)}
+                            title="Copy hash"
+                          >
+                            {copiedHash === log.txHash ? (
+                              <Check className="h-3 w-3 text-green-600" />
+                            ) : (
+                              <Copy className="h-3 w-3" />
+                            )}
+                          </button>
                         </div>
                       </td>
                       <td className="px-6 py-4 text-center">
@@ -99,11 +147,27 @@ export default function LedgerPage() {
                 </tbody>
               </table>
             </div>
-            {/* Pagination Mock */}
+            {/* Pagination */}
             <div className="bg-gray-50 border-t border-gray-200 px-6 py-3 flex items-center justify-between">
-              <Button variant="outline" size="sm" disabled>Previous</Button>
-              <span className="text-xs text-gray-500">Page 1 of 420</span>
-              <Button variant="outline" size="sm">Next</Button>
+              <Button
+                variant="outline"
+                size="sm"
+                disabled={safePage <= 1}
+                onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+              >
+                Previous
+              </Button>
+              <span className="text-xs text-gray-500">
+                Page {safePage} of {totalPages} ({filteredLogs.length} transactions)
+              </span>
+              <Button
+                variant="outline"
+                size="sm"
+                disabled={safePage >= totalPages}
+                onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+              >
+                Next
+              </Button>
             </div>
           </div>
         </div>
@@ -139,7 +203,9 @@ export default function LedgerPage() {
               <ArrowRightLeft className="h-8 w-8 text-[#0B3D91] mb-3" />
               <h3 className="font-semibold text-gray-900 mb-2">Need to verify a specific document?</h3>
               <p className="text-sm text-gray-600 mb-4">Upload a tender document to instantly verify its cryptographic signature against the blockchain.</p>
-              <Button variant="outline" className="w-full bg-white text-[#0B3D91] border-[#0B3D91]">Verify Document</Button>
+              <Link href="/verify">
+                <Button variant="outline" className="w-full bg-white text-[#0B3D91] border-[#0B3D91]">Verify Document</Button>
+              </Link>
             </CardContent>
           </Card>
         </div>
