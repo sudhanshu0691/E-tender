@@ -28,6 +28,15 @@ const healthPalette: Record<string, string> = {
   red: "bg-red-500",
 }
 
+function getEmailPendingQueue(details: unknown) {
+  if (typeof details !== "object" || details === null || !("pendingQueue" in details)) {
+    return 0
+  }
+
+  const queueCount = details.pendingQueue
+  return typeof queueCount === "number" ? queueCount : 0
+}
+
 function formatDeadline(deadline: string) {
   return new Date(deadline).toLocaleDateString("en-IN", {
     day: "numeric",
@@ -212,7 +221,7 @@ export default function AdminDashboardPage() {
                   ? `${details.endpoint || "IPFS Gateway"} • Connected`
                   : service === "kycService"
                     ? "KYC Verification Service • Operational"
-                    : `Email Service • ${"pendingQueue" in details ? (details as any).pendingQueue || 0 : 0} pending`
+                    : `Email Service • ${getEmailPendingQueue(details)} pending`
 
             return (
               <Card key={service} className="border-slate-200 shadow-sm">
@@ -302,7 +311,7 @@ export default function AdminDashboardPage() {
                       ? `${details.endpoint || "IPFS Gateway"} • Connected`
                       : service === "kycService"
                         ? "KYC Service • Operational"
-                        : `Email Service • ${"pendingQueue" in details ? (details as any).pendingQueue || 0 : 0} pending`
+                          : `Email Service • ${getEmailPendingQueue(details)} pending`
                 
                 return (
                   <div key={service} className="rounded-2xl border border-slate-200 bg-slate-50/80 p-4">

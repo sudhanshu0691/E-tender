@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import Link from "next/link"
 import { motion } from "framer-motion"
-import { ArrowRight, CheckCircle2, ShieldCheck, FileText, Blocks, Lock, Loader2, Radio, RefreshCw, Search, FileLock } from "lucide-react"
+import { ArrowRight, CheckCircle2, ShieldCheck, FileText, Blocks, Lock, Loader2, Radio, RefreshCw, Search, FileLock, Users } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
