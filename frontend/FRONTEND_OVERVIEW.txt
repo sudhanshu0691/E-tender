@@ -1,0 +1,94 @@
+Frontend overview — pages and UI components
+
+This document provides a concise explanation of each page, route, and shared component in the frontend folder to help new developers understand responsibilities and how pieces fit together.
+
+---
+
+**Pages & Routes (frontend/src/app)**
+
+- `page.tsx` (Home): Main marketing/home page. Loads live news from `/api/live-news`, shows hero, featured tenders CTA, and links to common sections.
+- `layout.tsx` (RootLayout): Global app layout. Imports fonts, wraps `children` with `AuthProvider`, `Navbar`, and `Footer`. Sets metadata (title/description).
+- `loading.tsx`: Global loading UI shown during route transitions (Next.js loading UI).
+- `not-found.tsx`: 404 page UI for missing routes.
+- `api/live-news/route.ts`: API route used by home page to fetch or synthesize live news feed (serverless function returning JSON articles).
+
+- `about/page.tsx` (About): Static about page describing TenderChain purpose and governance.
+- `how-it-works/page.tsx` (How It Works): Explanatory page about blockchain workflow, tender lifecycle, and verification steps.
+- `contact/page.tsx` (Contact): Contact and support page with helpdesk info and grievance links.
+- `ledger/page.tsx` (Transparency Ledger): UI to verify tenders and inspect blockchain records, likely accepts hash/id input and displays verification results.
+- `public-analytics/page.tsx` (Public Analytics): Public-facing analytics and charts about tenders, spending, and vendor statistics.
+- `tenders/page.tsx` (Tenders List): Lists live tenders, filters, and links to tender detail pages.
+- `tenders/[id]/page.tsx` (Tender Detail): Tender detail page showing full tender metadata, bids, timeline, and verification badges.
+
+- `verify/page.tsx` (Verify): Utility page for verifying documents/hashes against the ledger (similar to ledger).
+
+- `login/page.tsx` (Login): Login form for officers/vendors.
+- `register/page.tsx` (Register): Registration landing with links to vendor or officer registration.
+- `register/vendor-form.tsx` (Vendor Registration Form): Form for vendor signup and KYC submission.
+- `register/officer-form.tsx` (Officer Registration Form): Form for registering administrative officers.
+
+- `dashboard/page.tsx` (Vendor Dashboard): Vendor portal landing showing vendor-specific data (bids, performance, notifications).
+- `vendor/layout.tsx` (Vendor Layout): Layout wrapper for vendor routes, possibly hides global navbar/footer or shows vendor-specific nav.
+- `vendor/page.tsx` (Vendor index): Re-export of vendor dashboard or redirect to it.
+- `vendor/profile/page.tsx` (Vendor Profile): Vendor profile page with KYC status and company info.
+- `vendor/notifications/page.tsx` (Vendor Notifications): Vendor-specific notifications center.
+- `vendor/dispute/[tenderId]/page.tsx` (Vendor Dispute): Vendor dispute form for a specific tender.
+
+- `admin/layout.tsx` (Admin Layout): Layout wrapper used for `/admin` pages (officer portal styling and controls).
+- `admin/page.tsx` (Admin Dashboard): Officer portal main dashboard showing KYC queue, system health, recent tenders and summary metrics. (Contains KYC queue actions.)
+- `admin/profile/page.tsx` (Admin Profile): Officer profile page.
+- `admin/vendors/page.tsx` (Admin Vendors): Manage vendors list and KYC actions.
+- `admin/tenders.tsx` (Admin Tenders): Admin view of tenders listing and management actions.
+- `admin/tender/[id]/page.tsx` (Admin Tender Manage): Tender management page for a specific tender.
+- `admin/tender/create/page.tsx` (Create Tender): Form and UI to create/publish a new tender (triggers blockchain transaction modal flow).
+- `admin/officer-profile.tsx` (Officer Profile snippet): Auxiliary officer profile UI used in admin area.
+
+- `ministry-performance-analytics/page.tsx` (Ministry Analytics): Internal analytics targeted to ministries/officers.
+- `vendor-performance-tracking/page.tsx` (Vendor Performance Tracking): UI showing vendor KPIs and historical performance.
+- `notifications/page.tsx` (Global Notifications): Global notifications center for logged-in users.
+- `dispute/[tenderId]/page.tsx` (Dispute Form — public/officer): Public-facing dispute details or submission for a tender.
+
+---
+
+**Shared Components (frontend/src/components)**
+
+- `Navbar.tsx`: Main site navigation bar. Hides on `/admin` and `/vendor` routes. Contains top strip, main nav links, login/register actions, and mobile menu placeholder.
+- `Footer.tsx`: Site footer with quick links, contact/support, supported-by info. Hidden on `/admin` and `/vendor` routes.
+- `AuthProvider.tsx`: Context/provider for authentication state. Wraps app to provide user session, role checks, login/logout utilities.
+- `RoleGuard.tsx`: Higher-order component or wrapper to restrict access to routes/components based on user role (e.g., officer vs vendor).
+- `AdminPageContent.tsx`: Renders subpages inside admin dashboard depending on `page` query (tenders, bids, disputes, reports, profile, notifications).
+- `OfficerSidebar.tsx`: Sidebar navigation component used in admin views (links to admin sections and actions).
+
+- `KYCStatusBadge.tsx`: Small badge component that renders KYC status (approved, pending, under-review) with colors.
+- `KYCStatusStepper.tsx`: Multi-step UI used in KYC flow to show progress through verification steps.
+- `AuditTimeline.tsx`: Timeline component to render audit events and ledger timeline for tenders or actions.
+- `SystemHealthPanel.tsx`: Component showing system health boxes (blockchain node, IPFS, KYC, Email) — used in admin dashboard.
+- `IPFSHashPill.tsx`: Small UI pill to show IPFS hash with copy/preview actions.
+- `ImmutableBadge.tsx`: Visual badge indicating immutability or blockchain anchoring of a record.
+- `EncryptedBidBadge.tsx`: Badge indicating a bid is encrypted/locked until opening.
+- `WalletConnectButton.tsx`: Button component that triggers wallet connection flow for signing transactions.
+- `BlockchainTxModal.tsx`: Modal UI to show blockchain transaction progress, confirmation, and hash after publishing a tender.
+- `BidCountdown.tsx`: Countdown timer component for bid closing time, used on tender detail pages.
+- `WinnerBanner.tsx`: Banner displayed when a tender has an awarded winner.
+- `WeightSlider.tsx`: Small interactive slider used for weighting criteria or scoring in tender evaluation.
+
+**UI Primitives (frontend/src/components/ui)**
+- `button.tsx`: Reusable styled Button wrapper used across the app (accepts `variant`, `size` props).
+- `card.tsx`: Card primitives (`Card`, `CardHeader`, `CardContent`, `CardTitle`, `CardDescription`) used for layout blocks.
+- `input.tsx`: Form input primitives (text inputs, selects) with consistent styling.
+- `badge.tsx`: Small badge UI used for statuses and inline labels.
+
+---
+
+Notes & guidance for maintainers
+- For pages that render data (tenders, dashboard, admin), look into `frontend/src/data/*.json` for mock data used in local dev: `tenders.json`, `vendors.json`, `tenderBids.json`, `systemHealth.json`, etc.
+- Authentication and role gating are implemented in `AuthProvider.tsx` and `RoleGuard.tsx` — follow these when adding protected routes.
+- Admin actions (create tender, publish) interact with `BlockchainTxModal` and likely call backend APIs or web3 providers via `WalletConnectButton`.
+- UI primitives under `components/ui` are the place to change design tokens and shared control styles.
+
+If you want, I can now:
+- Generate a markdown version with file links and code excerpts for each file.
+- Expand any specific page/component into a full-page developer guide with props, example usage, and important helper functions.
+
+---
+Generated on: 2026-05-24

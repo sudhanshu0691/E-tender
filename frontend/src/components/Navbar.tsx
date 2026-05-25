@@ -35,7 +35,7 @@ export default function Navbar() {
       </div>
 
       {/* Main Navbar */}
-      <div className="container mx-auto flex h-16 items-center justify-between px-4">
+      <div className="container mx-auto flex h-16 items-center justify-between gap-4 px-4">
         <Link href="/" className="flex items-center space-x-2">
           <Shield className="h-8 w-8 text-[#0B3D91]" />
           <div>
@@ -49,21 +49,21 @@ export default function Navbar() {
         </Link>
 
         {/* Desktop Nav */}
-        <nav className="hidden items-center space-x-6 md:flex">
+        <nav className="hidden items-center gap-6 md:flex">
           <Link href="/" className="text-sm font-medium text-gray-700 hover:text-[#0B3D91]">
             Home
           </Link>
           <Link href="/tenders" className="text-sm font-medium text-gray-700 hover:text-[#0B3D91]">
-            Tenders
+            Tender
           </Link>
           <Link href="/public-analytics" className="text-sm font-medium text-gray-700 hover:text-[#0B3D91]">
             Public Analytics
           </Link>
-          <Link href="/how-it-works" className="text-sm font-medium text-gray-700 hover:text-[#0B3D91]">
-            How It Works
-          </Link>
           <Link href="/ledger" className="text-sm font-medium text-gray-700 hover:text-[#0B3D91]">
             Transparency Ledger
+          </Link>
+          <Link href="/how-it-works" className="text-sm font-medium text-gray-700 hover:text-[#0B3D91]">
+            How It Works
           </Link>
           <Link href="/about" className="text-sm font-medium text-gray-700 hover:text-[#0B3D91]">
             About
