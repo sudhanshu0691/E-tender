@@ -212,7 +212,7 @@ export default function AdminDashboardPage() {
                   ? `${details.endpoint || "IPFS Gateway"} • Connected`
                   : service === "kycService"
                     ? "KYC Verification Service • Operational"
-                    : `Email Service • ${"pendingQueue" in details ? (details as any).pendingQueue || 0 : 0} pending`
+                    : `Email Service • ${"pendingQueue" in details ? (details as Record<string, unknown>).pendingQueue || 0 : 0} pending`
 
             return (
               <Card key={service} className="border-slate-200 shadow-sm">
@@ -302,7 +302,7 @@ export default function AdminDashboardPage() {
                       ? `${details.endpoint || "IPFS Gateway"} • Connected`
                       : service === "kycService"
                         ? "KYC Service • Operational"
-                        : `Email Service • ${"pendingQueue" in details ? (details as any).pendingQueue || 0 : 0} pending`
+                        : `Email Service • ${"pendingQueue" in details ? (details as Record<string, unknown>).pendingQueue || 0 : 0} pending`
                 
                 return (
                   <div key={service} className="rounded-2xl border border-slate-200 bg-slate-50/80 p-4">
