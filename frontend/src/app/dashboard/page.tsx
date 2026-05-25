@@ -197,7 +197,7 @@ const MyBidsTab = () => (
                 <Badge variant="outline" className="bg-yellow-50 text-yellow-700 border-yellow-200">Pending Reveal</Badge>
               </td>
               <td className="px-4 py-4">
-                <Button variant="outline" size="sm" className="h-8 text-xs">Reveal Bid</Button>
+                <Button variant="outline" size="sm" className="h-8 text-xs" onClick={() => alert('Bid reveal will be available after the evaluation deadline passes. Your encrypted bid hash is stored on-chain.')}>Reveal Bid</Button>
               </td>
             </tr>
             <tr className="hover:bg-gray-50">
@@ -211,7 +211,7 @@ const MyBidsTab = () => (
                 <Badge variant="outline" className="bg-red-50 text-red-700 border-red-200">Lost</Badge>
               </td>
               <td className="px-4 py-4">
-                <Button variant="ghost" size="sm" className="h-8 text-xs">View Result</Button>
+                <Link href="/tenders/TC-DL-912"><Button variant="ghost" size="sm" className="h-8 text-xs">View Result</Button></Link>
               </td>
             </tr>
             <tr className="hover:bg-gray-50">
@@ -225,7 +225,7 @@ const MyBidsTab = () => (
                 <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">Awarded</Badge>
               </td>
               <td className="px-4 py-4">
-                <Button variant="ghost" size="sm" className="h-8 text-xs text-[#0B3D91]">View Contract</Button>
+                <Link href="/tenders/TC-RJ-405"><Button variant="ghost" size="sm" className="h-8 text-xs text-[#0B3D91]">View Contract</Button></Link>
               </td>
             </tr>
           </tbody>
@@ -272,8 +272,8 @@ const WonContractsTab = () => (
                   <div className="h-full bg-[#138808]" style={{ width: `${contract.progress}%` }}></div>
                 </div>
                 <div className="flex space-x-2">
-                  <Button variant="outline" size="sm" className="h-8"><ExternalLink className="w-4 h-4 mr-1" /> View Updates</Button>
-                  <Button size="sm" className="h-8 bg-[#0B3D91]"><Download className="w-4 h-4 mr-1" /> Download Agreement</Button>
+                  <Link href={`/tenders/${contract.id}`}><Button variant="outline" size="sm" className="h-8"><ExternalLink className="w-4 h-4 mr-1" /> View Updates</Button></Link>
+                  <Button size="sm" className="h-8 bg-[#0B3D91]" onClick={() => { const a = document.createElement('a'); a.href = '#'; a.download = `${contract.id}-agreement.pdf`; alert(`Agreement for ${contract.id} would download. (Mock environment — no actual PDF available.)`); }}><Download className="w-4 h-4 mr-1" /> Download Agreement</Button>
                 </div>
               </div>
             </div>
@@ -297,8 +297,8 @@ const WalletTab = () => (
             <Wallet className="w-8 h-8 text-blue-300 opacity-50" />
           </div>
           <div className="flex space-x-3">
-            <Button className="bg-white text-[#0B3D91] hover:bg-gray-100 flex-1">Add Funds</Button>
-            <Button className="bg-blue-600 text-white hover:bg-blue-700 border-none flex-1">Withdraw</Button>
+            <Button className="bg-white text-[#0B3D91] hover:bg-gray-100 flex-1" onClick={() => alert('Add Funds: In a live environment, this would redirect to your bank\'s payment gateway for NEFT/RTGS/UPI deposit into your TenderChain escrow wallet.')}>Add Funds</Button>
+            <Button className="bg-blue-600 text-white hover:bg-blue-700 border-none flex-1" onClick={() => alert('Withdraw: Available EMD balance can be withdrawn to your registered bank account. Processing takes 2-3 business days.')}>Withdraw</Button>
           </div>
         </CardContent>
       </Card>
@@ -460,7 +460,7 @@ const SettingsTab = () => (
           </div>
         </div>
         <div className="flex justify-end pt-4">
-          <Button className="bg-[#0B3D91]">Save Changes</Button>
+          <Button className="bg-[#0B3D91]" onClick={() => alert('Profile changes saved successfully.')}>Save Changes</Button>
         </div>
       </CardContent>
     </Card>
@@ -482,14 +482,14 @@ const SettingsTab = () => (
             <p className="font-medium text-gray-900">Digital Signature Certificate (DSC)</p>
             <p className="text-sm text-gray-500">Class 3 DSC required for bid submission</p>
           </div>
-          <Button variant="outline" size="sm">Update DSC</Button>
+          <Button variant="outline" size="sm" onClick={() => alert('DSC Update: Please insert your Class 3 Digital Signature Certificate USB token. The system will detect and update your DSC automatically.')}>Update DSC</Button>
         </div>
         <div className="flex items-center justify-between py-3">
           <div>
             <p className="font-medium text-gray-900">Two-Factor Authentication (2FA)</p>
             <p className="text-sm text-gray-500">App-based authenticator</p>
           </div>
-          <Button variant="outline" size="sm" className="text-red-600 border-red-200 hover:bg-red-50">Disable</Button>
+          <Button variant="outline" size="sm" className="text-red-600 border-red-200 hover:bg-red-50" onClick={() => { if (confirm('Are you sure you want to disable Two-Factor Authentication? This will reduce your account security.')) { alert('2FA has been disabled. We recommend re-enabling it for security.') } }}>Disable</Button>
         </div>
       </CardContent>
     </Card>
@@ -588,10 +588,10 @@ export default function DashboardPage() {
             <p className="text-gray-600 text-sm mt-1">{headerInfo.subtitle}</p>
           </div>
           <div className="hidden md:flex items-center space-x-4">
-            <button className="relative p-2 text-gray-400 hover:text-gray-600 transition-colors">
+            <Link href="/vendor/notifications" className="relative p-2 text-gray-400 hover:text-gray-600 transition-colors">
               <Bell className="w-5 h-5" />
               <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full border-2 border-[#F8F9FC]"></span>
-            </button>
+            </Link>
             <div className="bg-white px-4 py-2 rounded-lg border border-gray-200 shadow-sm text-sm flex items-center space-x-2">
               <ShieldCheck className="w-4 h-4 text-[#138808]" />
               <span className="text-gray-500">Network:</span> <span className="text-[#138808] font-bold">Synced</span>

@@ -139,6 +139,21 @@ export default function PublicTenderDetailPage({ params }: { params: { id: strin
           </div>
 
           {!bidsData?.deadlinePassed && <BidCountdown deadline={tender.deadline} />}
+
+          {tender.status === 'Open' && !tender.deadlinePassed && (
+            <div className="mt-6 bg-[#0B3D91]/5 border border-[#0B3D91]/20 rounded-lg p-6 flex items-center justify-between">
+              <div>
+                <h3 className="font-semibold text-[#0B3D91]">Interested in this tender?</h3>
+                <p className="text-sm text-slate-600 mt-1">Submit your encrypted bid before the deadline.</p>
+              </div>
+              <Link href={`/tenders/${id}/bid`}>
+                <Button className="bg-[#138808] hover:bg-[#138808]/90 font-semibold">
+                  <Gavel className="mr-2 h-4 w-4" />
+                  Submit Bid
+                </Button>
+              </Link>
+            </div>
+          )}
         </div>
 
         {/* Winner Card */}
