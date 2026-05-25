@@ -205,14 +205,14 @@ export default function AdminDashboardPage() {
                       : AlertTriangle
 
             const statusColor = details.status === "ok" ? "green" : details.status === "degraded" ? "yellow" : "red"
-            const displayText = 
-              service === "blockchainNode" 
+            const displayText =
+              service === "blockchainNode" && "network" in details && "rpc" in details
                 ? `${details.network || "Unknown"} • ${details.rpc || "N/A"}`
-                : service === "ipfs"
+                : service === "ipfs" && "endpoint" in details
                   ? `${details.endpoint || "IPFS Gateway"} • Connected`
                   : service === "kycService"
                     ? "KYC Verification Service • Operational"
-                    : `Email Service • ${details.pendingQueue || 0} pending`
+                    : `Email Service • ${"pendingQueue" in details ? (details as any).pendingQueue || 0 : 0} pending`
 
             return (
               <Card key={service} className="border-slate-200 shadow-sm">
@@ -295,14 +295,14 @@ export default function AdminDashboardPage() {
             <CardContent className="space-y-4 pt-6">
               {Object.entries(systemHealthData.services).map(([service, details]) => {
                 const statusColor = details.status === "ok" ? "green" : details.status === "degraded" ? "yellow" : "red"
-                const displayText = 
-                  service === "blockchainNode" 
+                const displayText =
+                  service === "blockchainNode" && "network" in details && "rpc" in details
                     ? `${details.network || "Unknown"} • Latency ${details.rpc ? "healthy" : "unknown"}`
-                    : service === "ipfs"
+                    : service === "ipfs" && "endpoint" in details
                       ? `${details.endpoint || "IPFS Gateway"} • Connected`
                       : service === "kycService"
                         ? "KYC Service • Operational"
-                        : `Email Service • ${details.pendingQueue || 0} pending`
+                        : `Email Service • ${"pendingQueue" in details ? (details as any).pendingQueue || 0 : 0} pending`
                 
                 return (
                   <div key={service} className="rounded-2xl border border-slate-200 bg-slate-50/80 p-4">
