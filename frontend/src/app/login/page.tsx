@@ -13,6 +13,13 @@ export default function LoginPage() {
   const [otpSent, setOtpSent] = useState(false)
   const [dscDetected, setDscDetected] = useState(false)
   const [showPasswordReset, setShowPasswordReset] = useState(false)
+  const [resetStep, setResetStep] = useState<1 | 2 | 3>(1)
+  const [resetEmail, setResetEmail] = useState("")
+  const [resetOtp, setResetOtp] = useState("")
+  const [resetPassword, setResetPassword] = useState("")
+  const [resetConfirmPassword, setResetConfirmPassword] = useState("")
+  const [resetOtpSent, setResetOtpSent] = useState(false)
+  const [resetSuccess, setResetSuccess] = useState(false)
   const router = useRouter()
   const searchParams = useSearchParams()
   const { user, login, isReady } = useAuth()
@@ -125,22 +132,160 @@ export default function LoginPage() {
           </div>
 
           {showPasswordReset ? (
-            // Password Reset Flow
             <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Email / Employee ID</label>
-                <Input type="text" placeholder="Enter your official email" />
-              </div>
-              <Button type="button" className="w-full bg-[#0B3D91] hover:bg-[#0B3D91]/90">
-                Send Reset OTP
-              </Button>
-              <button 
-                type="button"
-                onClick={() => setShowPasswordReset(false)}
-                className="w-full text-sm text-[#0B3D91] hover:underline"
-              >
-                Back to Login
-              </button>
+              {resetSuccess ? (
+                <div className="text-center space-y-4 py-4">
+                  <div className="mx-auto h-16 w-16 rounded-full bg-green-100 flex items-center justify-center">
+                    <Shield className="h-8 w-8 text-green-600" />
+                  </div>
+                  <h3 className="font-semibold text-lg text-gray-900">Password Reset Successful</h3>
+                  <p className="text-sm text-gray-600">Your password has been updated. You can now login with your new password.</p>
+                  <Button
+                    type="button"
+                    className="w-full bg-[#0B3D91] hover:bg-[#0B3D91]/90"
+                    onClick={() => {
+                      setShowPasswordReset(false)
+                      setResetSuccess(false)
+                      setResetStep(1)
+                      setResetEmail("")
+                      setResetOtp("")
+                      setResetPassword("")
+                      setResetConfirmPassword("")
+                    }}
+                  >
+                    Back to Login
+                  </Button>
+                </div>
+              ) : (
+                <>
+                  <div className="flex items-center gap-2 mb-2">
+                    {[1, 2, 3].map((s) => (
+                      <div key={s} className={`h-1.5 flex-1 rounded-full ${s <= resetStep ? "bg-[#0B3D91]" : "bg-gray-200"}`} />
+                    ))}
+                  </div>
+                  <h3 className="font-semibold text-gray-900">
+                    {resetStep === 1 ? "Enter your email" : resetStep === 2 ? "Verify OTP" : "Set new password"}
+                  </h3>
+
+                  {resetStep === 1 && (
+                    <>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Registered Email / Employee ID</label>
+                        <Input
+                          type="text"
+                          placeholder="Enter your registered email"
+                          value={resetEmail}
+                          onChange={(e) => setResetEmail(e.target.value)}
+                          required
+                        />
+                      </div>
+                      <Button
+                        type="button"
+                        className="w-full bg-[#0B3D91] hover:bg-[#0B3D91]/90"
+                        disabled={!resetEmail.trim()}
+                        onClick={() => {
+                          setResetOtpSent(true)
+                          setTimeout(() => setResetStep(2), 500)
+                        }}
+                      >
+                        {resetOtpSent ? "Resend OTP" : "Send Reset OTP"}
+                      </Button>
+                    </>
+                  )}
+
+                  {resetStep === 2 && (
+                    <>
+                      <p className="text-sm text-gray-600">A 6-digit OTP has been sent to <span className="font-medium">{resetEmail}</span></p>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Enter OTP</label>
+                        <Input
+                          type="text"
+                          placeholder="6-digit OTP"
+                          maxLength={6}
+                          value={resetOtp}
+                          onChange={(e) => setResetOtp(e.target.value.replace(/\D/g, ""))}
+                          className="text-center tracking-[0.5em] font-mono text-lg"
+                        />
+                      </div>
+                      <div className="flex gap-3">
+                        <Button type="button" variant="outline" className="flex-1" onClick={() => setResetStep(1)}>
+                          Back
+                        </Button>
+                        <Button
+                          type="button"
+                          className="flex-1 bg-[#0B3D91] hover:bg-[#0B3D91]/90"
+                          disabled={resetOtp.length !== 6}
+                          onClick={() => setResetStep(3)}
+                        >
+                          Verify OTP
+                        </Button>
+                      </div>
+                      <button
+                        type="button"
+                        className="w-full text-xs text-[#0B3D91] hover:underline"
+                        onClick={() => alert("OTP resent to " + resetEmail)}
+                      >
+                        Didn&apos;t receive the OTP? Resend
+                      </button>
+                    </>
+                  )}
+
+                  {resetStep === 3 && (
+                    <>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">New Password</label>
+                        <Input
+                          type="password"
+                          placeholder="Enter new password"
+                          value={resetPassword}
+                          onChange={(e) => setResetPassword(e.target.value)}
+                        />
+                        <p className="text-xs text-gray-500 mt-1">Min 8 characters, include uppercase, number, and special character</p>
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Confirm New Password</label>
+                        <Input
+                          type="password"
+                          placeholder="Re-enter new password"
+                          value={resetConfirmPassword}
+                          onChange={(e) => setResetConfirmPassword(e.target.value)}
+                        />
+                        {resetConfirmPassword && resetPassword !== resetConfirmPassword && (
+                          <p className="text-xs text-red-600 mt-1">Passwords do not match</p>
+                        )}
+                      </div>
+                      <div className="flex gap-3">
+                        <Button type="button" variant="outline" className="flex-1" onClick={() => setResetStep(2)}>
+                          Back
+                        </Button>
+                        <Button
+                          type="button"
+                          className="flex-1 bg-[#138808] hover:bg-[#138808]/90"
+                          disabled={!resetPassword || resetPassword.length < 8 || resetPassword !== resetConfirmPassword}
+                          onClick={() => setResetSuccess(true)}
+                        >
+                          Reset Password
+                        </Button>
+                      </div>
+                    </>
+                  )}
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowPasswordReset(false)
+                      setResetStep(1)
+                      setResetEmail("")
+                      setResetOtp("")
+                      setResetPassword("")
+                      setResetConfirmPassword("")
+                    }}
+                    className="w-full text-sm text-[#0B3D91] hover:underline"
+                  >
+                    Back to Login
+                  </button>
+                </>
+              )}
             </div>
           ) : (
             <>

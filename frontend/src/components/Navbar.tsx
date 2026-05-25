@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { Shield, Menu, Globe, X } from "lucide-react"
+import { Shield, Menu, Globe, X, Moon, Sun } from "lucide-react"
 import { Button } from "./ui/button"
 import { usePathname } from "next/navigation"
 
@@ -11,6 +11,7 @@ export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [fontSize, setFontSize] = useState<"normal" | "large" | "xlarge">("normal")
   const [lang, setLang] = useState<"en" | "hi">("en")
+  const [darkMode, setDarkMode] = useState(false)
   
   // Hide navbar on admin and vendor routes
   if (pathname.startsWith('/admin') || pathname.startsWith('/vendor')) {
@@ -28,6 +29,18 @@ export default function Navbar() {
 
   const toggleLang = () => {
     setLang((prev) => (prev === "en" ? "hi" : "en"))
+  }
+
+  const toggleDarkMode = () => {
+    setDarkMode((prev) => {
+      const next = !prev
+      if (next) {
+        document.documentElement.classList.add("dark")
+      } else {
+        document.documentElement.classList.remove("dark")
+      }
+      return next
+    })
   }
 
   const navLinks = [
@@ -74,6 +87,13 @@ export default function Navbar() {
             >
               <Globe className="h-3 w-3" />
               <span>{lang === "en" ? "English / हिंदी" : "हिंदी / English"}</span>
+            </button>
+            <button
+              onClick={toggleDarkMode}
+              className="flex items-center space-x-1 cursor-pointer hover:text-[#FF9933] border-l border-white/20 pl-4"
+            >
+              {darkMode ? <Sun className="h-3 w-3" /> : <Moon className="h-3 w-3" />}
+              <span>{darkMode ? "Light" : "Dark"}</span>
             </button>
           </div>
         </div>

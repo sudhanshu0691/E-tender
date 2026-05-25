@@ -311,7 +311,7 @@ export default function AdminDashboardPage() {
                       ? `${details.endpoint || "IPFS Gateway"} • Connected`
                       : service === "kycService"
                         ? "KYC Service • Operational"
-                          : `Email Service • ${getEmailPendingQueue(details)} pending`
+                        : `Email Service • ${getEmailPendingQueue(details)} pending`
                 
                 return (
                   <div key={service} className="rounded-2xl border border-slate-200 bg-slate-50/80 p-4">
