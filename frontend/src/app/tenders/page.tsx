@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react"
 import Link from "next/link"
-import { Search, Filter, ShieldCheck, Clock, FileText, RotateCcw } from "lucide-react"
+import { Search, Filter, ShieldCheck, Clock, FileText, RotateCcw, Bookmark, BookmarkCheck } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -21,6 +21,13 @@ export default function TendersPage() {
   const [categoryFilter, setCategoryFilter] = useState("All Categories")
   const [stateFilter, setStateFilter] = useState("All States")
   const [currentPage, setCurrentPage] = useState(1)
+  const [bookmarked, setBookmarked] = useState<string[]>([])
+
+  const toggleBookmark = (id: string) => {
+    setBookmarked((prev) =>
+      prev.includes(id) ? prev.filter((b) => b !== id) : [...prev, id]
+    )
+  }
 
   const categories = useMemo(() => {
     const cats = new Set(tendersData.map((t) => t.category))
@@ -245,6 +252,17 @@ export default function TendersPage() {
                         <Link href={`/ledger?search=${tender.hash}`} className="w-full">
                           <Button variant="outline" className="w-full text-xs h-9">Verify Hash</Button>
                         </Link>
+                        <Button
+                          variant="outline"
+                          className={`w-full text-xs h-9 ${bookmarked.includes(tender.id) ? "bg-amber-50 border-amber-300 text-amber-700" : ""}`}
+                          onClick={() => toggleBookmark(tender.id)}
+                        >
+                          {bookmarked.includes(tender.id) ? (
+                            <><BookmarkCheck className="h-4 w-4 mr-1" /> Saved</>
+                          ) : (
+                            <><Bookmark className="h-4 w-4 mr-1" /> Watch</>
+                          )}
+                        </Button>
                       </div>
                     </div>
                   </CardContent>

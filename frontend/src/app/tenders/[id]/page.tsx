@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { ArrowLeft, AlertTriangle, Clock, FileText, BarChart3, Gavel, CheckCircle2 } from 'lucide-react'
+import { ArrowLeft, AlertTriangle, Clock, FileText, BarChart3, Gavel, CheckCircle2, Bell } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -229,6 +229,40 @@ export default function PublicTenderDetailPage({ params }: { params: { id: strin
                 <p className="text-2xl font-bold">{(tender.evaluationWeights.technical * 100).toFixed(0)}%</p>
               </div>
             </div>
+          </CardContent>
+        </Card>
+
+        {/* Corrigendums / Amendments (P2.7) */}
+        <Card className="mb-8">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Bell className="h-5 w-5 text-amber-500" />
+              Corrigendums &amp; Amendments
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            {tender.status === 'Open' ? (
+              <div className="space-y-3">
+                <div className="border border-amber-200 bg-amber-50 rounded-lg p-4">
+                  <div className="flex items-center justify-between mb-2">
+                    <Badge className="bg-amber-100 text-amber-800">Corrigendum #1</Badge>
+                    <span className="text-xs text-gray-500">Published: {new Date(new Date(tender.deadline).getTime() - 7 * 86400000).toLocaleDateString()}</span>
+                  </div>
+                  <p className="text-sm text-gray-700 font-medium">Deadline Extended</p>
+                  <p className="text-sm text-gray-600 mt-1">The bid submission deadline has been extended by 7 days to allow for additional queries from prospective bidders.</p>
+                </div>
+                <div className="border border-blue-200 bg-blue-50 rounded-lg p-4">
+                  <div className="flex items-center justify-between mb-2">
+                    <Badge className="bg-blue-100 text-blue-800">Amendment #1</Badge>
+                    <span className="text-xs text-gray-500">Published: {new Date(new Date(tender.deadline).getTime() - 14 * 86400000).toLocaleDateString()}</span>
+                  </div>
+                  <p className="text-sm text-gray-700 font-medium">Updated Technical Specifications</p>
+                  <p className="text-sm text-gray-600 mt-1">Section 4.2 of the technical requirements has been updated. Revised document available in the documents section above.</p>
+                </div>
+              </div>
+            ) : (
+              <p className="text-sm text-gray-500">No corrigendums were issued for this tender.</p>
+            )}
           </CardContent>
         </Card>
 
