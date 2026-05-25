@@ -205,15 +205,14 @@ export default function AdminDashboardPage() {
                       : AlertTriangle
 
             const statusColor = details.status === "ok" ? "green" : details.status === "degraded" ? "yellow" : "red"
-            const d = details as Record<string, unknown>
-            const displayText = 
-              service === "blockchainNode" 
-                ? `${d.network || "Unknown"} • ${d.rpc || "N/A"}`
-                : service === "ipfs"
-                  ? `${d.endpoint || "IPFS Gateway"} • Connected`
+            const displayText =
+              service === "blockchainNode" && "network" in details && "rpc" in details
+                ? `${details.network || "Unknown"} • ${details.rpc || "N/A"}`
+                : service === "ipfs" && "endpoint" in details
+                  ? `${details.endpoint || "IPFS Gateway"} • Connected`
                   : service === "kycService"
                     ? "KYC Verification Service • Operational"
-                    : `Email Service • ${d.pendingQueue || 0} pending`
+                    : `Email Service • ${"pendingQueue" in details ? (details as any).pendingQueue || 0 : 0} pending`
 
             return (
               <Card key={service} className="border-slate-200 shadow-sm">
@@ -296,15 +295,14 @@ export default function AdminDashboardPage() {
             <CardContent className="space-y-4 pt-6">
               {Object.entries(systemHealthData.services).map(([service, details]) => {
                 const statusColor = details.status === "ok" ? "green" : details.status === "degraded" ? "yellow" : "red"
-                const d2 = details as Record<string, unknown>
-                const displayText = 
-                  service === "blockchainNode" 
-                    ? `${d2.network || "Unknown"} • Latency ${d2.rpc ? "healthy" : "unknown"}`
-                    : service === "ipfs"
-                      ? `${d2.endpoint || "IPFS Gateway"} • Connected`
+                const displayText =
+                  service === "blockchainNode" && "network" in details && "rpc" in details
+                    ? `${details.network || "Unknown"} • Latency ${details.rpc ? "healthy" : "unknown"}`
+                    : service === "ipfs" && "endpoint" in details
+                      ? `${details.endpoint || "IPFS Gateway"} • Connected`
                       : service === "kycService"
                         ? "KYC Service • Operational"
-                        : `Email Service • ${d2.pendingQueue || 0} pending`
+                        : `Email Service • ${"pendingQueue" in details ? (details as any).pendingQueue || 0 : 0} pending`
                 
                 return (
                   <div key={service} className="rounded-2xl border border-slate-200 bg-slate-50/80 p-4">

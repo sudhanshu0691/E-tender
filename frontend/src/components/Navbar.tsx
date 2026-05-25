@@ -80,7 +80,7 @@ export default function Navbar() {
       </div>
 
       {/* Main Navbar */}
-      <div className="container mx-auto flex h-16 items-center justify-between px-4">
+      <div className="container mx-auto flex h-16 items-center justify-between gap-4 px-4">
         <Link href="/" className="flex items-center space-x-2">
           <Shield className="h-8 w-8 text-[#0B3D91]" />
           <div>
