@@ -1,5 +1,6 @@
 "use client"
 
+import Link from "next/link"
 import { FileText, Lock, Blocks, CheckCircle2, ShieldCheck, ChevronRight } from "lucide-react"
 
 export default function HowItWorksPage() {
@@ -134,12 +135,12 @@ export default function HowItWorksPage() {
         <div className="mt-12 bg-white p-8 rounded-2xl border border-gray-200 shadow-sm text-center">
           <h2 className="font-poppins text-2xl font-bold text-[#0B3D91] mb-4">Ready to participate in transparent procurement?</h2>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
-            <button className="bg-[#0B3D91] hover:bg-[#0B3D91]/90 text-white px-6 py-3 rounded-md font-semibold inline-flex items-center justify-center">
+            <Link href="/register" className="bg-[#0B3D91] hover:bg-[#0B3D91]/90 text-white px-6 py-3 rounded-md font-semibold inline-flex items-center justify-center">
               Register <ChevronRight className="ml-2 h-4 w-4" />
-            </button>
-            <button className="bg-white border border-[#0B3D91] text-[#0B3D91] hover:bg-gray-50 px-6 py-3 rounded-md font-semibold inline-flex items-center justify-center">
+            </Link>
+            <Link href="/ledger" className="bg-white border border-[#0B3D91] text-[#0B3D91] hover:bg-gray-50 px-6 py-3 rounded-md font-semibold inline-flex items-center justify-center">
               View Transparency Ledger
-            </button>
+            </Link>
           </div>
         </div>
       </div>

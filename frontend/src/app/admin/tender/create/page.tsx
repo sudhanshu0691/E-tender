@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input"
 import { BlockchainTxModal } from "@/components/BlockchainTxModal"
 import { IPFSHashPill } from "@/components/IPFSHashPill"
 import { WeightSlider } from "@/components/WeightSlider"
+import { createTender } from "@/lib/tenderStore"
 
 const STEPS = [
   "Basic Info",
@@ -96,6 +97,29 @@ export default function CreateTenderPage() {
   }
 
   const handlePublishSuccess = () => {
+    createTender({
+      tenderTitle: title || "Untitled Tender",
+      nitNo: `NIT-${Date.now()}`,
+      department,
+      category,
+      state: "Maharashtra",
+      budget: Number(maxBudget || minBudget || 0) || 0,
+      emrAmount: Math.max(1, Math.round((Number(maxBudget || minBudget || 0) || 0) * 0.02)),
+      deadline: deadline ? new Date(deadline).toISOString() : new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+      bidOpeningDate: deadline ? new Date(new Date(deadline).getTime() + 7 * 24 * 60 * 60 * 1000).toISOString() : new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString(),
+      status: "Open",
+      deadlinePassed: false,
+      ipfsDocuments: ipfsHash ? [{ name: "Tender Specification", type: "spec", ipfsHash }] : [],
+      evaluationWeights: {
+        price: weights.price / 100,
+        financial: weights.financial / 100,
+        experience: weights.experience / 100,
+        performance: weights.performance / 100,
+        technical: weights.technical / 100,
+        compliance: weights.compliance / 100,
+        proposal: weights.proposal / 100,
+      },
+    })
     setTxOpen(false)
     router.push("/admin?published=1")
   }

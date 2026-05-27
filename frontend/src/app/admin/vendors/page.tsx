@@ -47,10 +47,10 @@ export default function VendorsManagementPage() {
 
   const filtered =
     activeTab === 'kyc-queue'
-      ? kycQueueVendors
+      ? kycQueueVendors.filter((v) => v.companyName.toLowerCase().includes(searchQuery.toLowerCase()))
       : activeTab === 'all-vendors'
-        ? allVendors
-        : blacklistedVendors.filter((v) => !v.companyName.toLowerCase().includes(searchQuery.toLowerCase()))
+        ? allVendors.filter((v) => v.companyName.toLowerCase().includes(searchQuery.toLowerCase()))
+        : blacklistedVendors.filter((v) => v.companyName.toLowerCase().includes(searchQuery.toLowerCase()))
 
   const handleApprove = (vendorId: string) => {
     setSelectedVendor(vendorId)

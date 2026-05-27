@@ -1,15 +1,16 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect, useMemo } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line } from "recharts"
-import { LayoutDashboard, FileText, CheckCircle2, AlertCircle, TrendingUp, Settings, LogOut, Wallet, ShieldCheck, Download, ExternalLink, Bell, Lock } from "lucide-react"
+import { LayoutDashboard, FileText, CheckCircle2, AlertCircle, TrendingUp, Settings, LogOut, Wallet, ShieldCheck, Download, ExternalLink, Bell, Lock, Gavel, Globe } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { useAuth } from "@/components/AuthProvider"
+import { useTenderStore } from "@/lib/tenderStore"
 
 const monthlyData = [
   { name: 'Jan', bids: 4 }, { name: 'Feb', bids: 3 }, { name: 'Mar', bids: 7 },
@@ -22,7 +23,21 @@ const statusData = [
   { name: 'Pending', value: 3, color: '#FF9933' }
 ]
 
-const OverviewTab = () => (
+function formatVendorBudget(budget: number) {
+  const crores = budget / 10000000
+  return `₹ ${crores.toFixed(1)} Cr`
+}
+
+function getVendorTimeRemaining(deadline: string) {
+  const diff = new Date(deadline).getTime() - Date.now()
+  if (diff <= 0) return "Deadline passed"
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24))
+  const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
+  if (days > 0) return `${days}d ${hours}h left`
+  return `${hours}h left`
+}
+
+const OverviewTab = ({ mounted }: { mounted: boolean }) => (
   <>
     {/* Stats Grid */}
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -62,16 +77,18 @@ const OverviewTab = () => (
         <CardHeader>
           <CardTitle className="text-lg">Bidding Activity (2024)</CardTitle>
         </CardHeader>
-        <CardContent className="h-72">
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={monthlyData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E5E7EB" />
-              <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: '#6B7280', fontSize: 12 }} dy={10} />
-              <YAxis axisLine={false} tickLine={false} tick={{ fill: '#6B7280', fontSize: 12 }} />
-              <RechartsTooltip cursor={{ fill: '#F3F4F6' }} contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }} />
-              <Bar dataKey="bids" fill="#0B3D91" radius={[4, 4, 0, 0]} barSize={40} />
-            </BarChart>
-          </ResponsiveContainer>
+        <CardContent className="h-72" style={{ minHeight: 0 }}>
+          {mounted && (
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={monthlyData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E5E7EB" />
+                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: '#6B7280', fontSize: 12 }} dy={10} />
+                <YAxis axisLine={false} tickLine={false} tick={{ fill: '#6B7280', fontSize: 12 }} />
+                <RechartsTooltip cursor={{ fill: '#F3F4F6' }} contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }} />
+                <Bar dataKey="bids" fill="#0B3D91" radius={[4, 4, 0, 0]} barSize={40} />
+              </BarChart>
+            </ResponsiveContainer>
+          )}
         </CardContent>
       </Card>
       
@@ -79,25 +96,27 @@ const OverviewTab = () => (
         <CardHeader>
           <CardTitle className="text-lg">Bid Success Rate</CardTitle>
         </CardHeader>
-        <CardContent className="h-72 flex flex-col items-center justify-center relative">
-          <ResponsiveContainer width="100%" height="100%">
-            <PieChart>
-              <Pie
-                data={statusData}
-                cx="50%"
-                cy="50%"
-                innerRadius={60}
-                outerRadius={80}
-                paddingAngle={2}
-                dataKey="value"
-              >
-                {statusData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={entry.color} />
-                ))}
-              </Pie>
-              <RechartsTooltip />
-            </PieChart>
-          </ResponsiveContainer>
+        <CardContent className="h-72 flex flex-col items-center justify-center relative" style={{ minHeight: 0 }}>
+          {mounted && (
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart>
+                <Pie
+                  data={statusData}
+                  cx="50%"
+                  cy="50%"
+                  innerRadius={60}
+                  outerRadius={80}
+                  paddingAngle={2}
+                  dataKey="value"
+                >
+                  {statusData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={entry.color} />
+                  ))}
+                </Pie>
+                <RechartsTooltip />
+              </PieChart>
+            </ResponsiveContainer>
+          )}
           <div className="absolute flex flex-col items-center justify-center pointer-events-none">
             <span className="text-2xl font-bold text-gray-900">21%</span>
             <span className="text-xs text-gray-500">Win Rate</span>
@@ -165,6 +184,132 @@ const OverviewTab = () => (
     </Card>
   </>
 )
+
+const LiveTendersTab = () => {
+  const { tenders, vendorCompanyName, vendorId, walletAddress, notificationCount } = useTenderStore()
+
+  const openTenders = useMemo(
+    () => [...tenders].filter((tender) => tender.status === "Open").sort((a, b) => +new Date(b.createdAt || "") - +new Date(a.createdAt || "")),
+    [tenders],
+  )
+
+  const stats = useMemo(
+    () => ({
+      open: tenders.filter((tender) => tender.status === "Open").length,
+      awarded: tenders.filter((tender) => tender.status === "Awarded").length,
+      total: tenders.length,
+    }),
+    [tenders],
+  )
+
+  return (
+    <div className="space-y-6">
+      <div className="rounded-3xl border border-slate-200 bg-white/90 p-6 shadow-sm backdrop-blur">
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+          <div className="max-w-3xl space-y-3">
+            <div className="inline-flex items-center gap-2 rounded-full border border-[#138808]/15 bg-[#138808]/5 px-3 py-1 text-xs font-semibold uppercase tracking-[0.35em] text-[#138808]">
+              <Gavel className="h-3.5 w-3.5" />
+              Live Tender Feed
+            </div>
+            <div>
+              <h2 className="text-3xl font-bold text-slate-950 md:text-4xl">New tenders published by officers</h2>
+              <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600">
+                This view merges the old dashboard with the new live vendor portal so vendors can track active tenders in the same workspace.
+              </p>
+            </div>
+            <div className="flex flex-wrap items-center gap-3 text-sm text-slate-500">
+              <span className="inline-flex items-center gap-2 rounded-full bg-slate-100 px-3 py-1.5">
+                <LayoutDashboard className="h-4 w-4 text-[#0B3D91]" /> {vendorCompanyName}
+              </span>
+              <span className="inline-flex items-center gap-2 rounded-full bg-slate-100 px-3 py-1.5">
+                <Globe className="h-4 w-4 text-[#0B3D91]" /> {vendorId}
+              </span>
+              <span className="inline-flex items-center gap-2 rounded-full bg-slate-100 px-3 py-1.5">
+                <Bell className="h-4 w-4 text-[#0B3D91]" /> Notifications: {notificationCount}
+              </span>
+            </div>
+          </div>
+          <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-600 shadow-sm">
+            <p className="font-semibold text-slate-950">Wallet</p>
+            <p className="mt-1 font-mono text-xs">{walletAddress}</p>
+            <p className="mt-3 text-xs uppercase tracking-[0.3em] text-slate-400">Live portal stats</p>
+            <div className="mt-3 grid grid-cols-3 gap-2 text-center text-xs">
+              <div className="rounded-xl bg-white px-2 py-2 shadow-sm">
+                <p className="font-semibold text-slate-950">{stats.open}</p>
+                <p className="text-slate-500">Open</p>
+              </div>
+              <div className="rounded-xl bg-white px-2 py-2 shadow-sm">
+                <p className="font-semibold text-slate-950">{stats.awarded}</p>
+                <p className="text-slate-500">Awarded</p>
+              </div>
+              <div className="rounded-xl bg-white px-2 py-2 shadow-sm">
+                <p className="font-semibold text-slate-950">{stats.total}</p>
+                <p className="text-slate-500">Total</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <Card className="border-slate-200 shadow-sm">
+        <CardHeader className="border-b border-slate-100 pb-4">
+          <CardTitle className="text-xl text-slate-950 flex items-center gap-2">
+            <Gavel className="h-5 w-5 text-[#0B3D91]" />
+            Current Open Tenders
+          </CardTitle>
+          <CardDescription>All open tenders are shown here as soon as an officer publishes them.</CardDescription>
+        </CardHeader>
+        <CardContent className="p-0">
+          {openTenders.length === 0 ? (
+            <div className="p-8 text-center text-sm text-slate-500">
+              <FileText className="mx-auto mb-2 h-10 w-10 text-slate-300" />
+              No open tenders yet. When an officer publishes one, it will appear here automatically.
+            </div>
+          ) : (
+            <div className="divide-y divide-slate-100">
+              {openTenders.map((tender) => (
+                <div key={tender.id} className="p-5 transition-colors hover:bg-slate-50/70">
+                  <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+                    <div className="min-w-0 flex-1 space-y-3">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className="font-mono text-xs font-bold text-[#0B3D91]">{tender.id}</span>
+                        <Badge variant="outline" className="border-emerald-200 bg-emerald-50 text-emerald-700">Open</Badge>
+                        <Badge variant="outline" className="border-slate-200 bg-slate-50 text-slate-600">{tender.category}</Badge>
+                      </div>
+                      <div>
+                        <h3 className="text-lg font-semibold text-slate-950">{tender.tenderTitle}</h3>
+                        <p className="mt-1 text-sm text-slate-600">{tender.department}</p>
+                      </div>
+                      <div className="flex flex-wrap gap-4 text-sm text-slate-600">
+                        <span>Budget: <strong className="text-slate-950">{formatVendorBudget(tender.budget)}</strong></span>
+                        <span>State: <strong className="text-slate-950">{tender.state}</strong></span>
+                        <span>EMD: <strong className="text-slate-950">₹ {(tender.emrAmount / 100000).toFixed(1)} L</strong></span>
+                        <span className="text-[#DC2626]">{getVendorTimeRemaining(tender.deadline)}</span>
+                      </div>
+                      {tender.createdBy && (
+                        <p className="text-xs text-slate-400">
+                          Published by {tender.createdBy} on {new Date(tender.createdAt || "").toLocaleDateString()}
+                        </p>
+                      )}
+                    </div>
+                    <div className="flex min-w-[160px] flex-col gap-2">
+                      <Link href={`/tenders/${tender.id}`} className="w-full">
+                        <Button className="w-full bg-[#0B3D91] hover:bg-[#083174]">View Details</Button>
+                      </Link>
+                      <Link href={`/ledger?search=${tender.hash}`} className="w-full">
+                        <Button variant="outline" className="w-full">Verify on Ledger</Button>
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </CardContent>
+      </Card>
+    </div>
+  )
+}
 
 const MyBidsTab = () => (
   <Card>
@@ -375,7 +520,7 @@ const WalletTab = () => (
   </div>
 )
 
-const AnalyticsTab = () => {
+const AnalyticsTab = ({ mounted }: { mounted: boolean }) => {
   const performanceData = [
     { name: 'Jan', winRate: 15, avgBidDifference: -5 },
     { name: 'Feb', winRate: 18, avgBidDifference: -3 },
@@ -416,17 +561,19 @@ const AnalyticsTab = () => {
           <CardTitle className="text-lg">Performance Trends</CardTitle>
           <CardDescription>Win rate vs Bid difference relative to L1 over time</CardDescription>
         </CardHeader>
-        <CardContent className="h-80">
-          <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={performanceData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E5E7EB" />
-              <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: '#6B7280', fontSize: 12 }} dy={10} />
-              <YAxis axisLine={false} tickLine={false} tick={{ fill: '#6B7280', fontSize: 12 }} />
-              <RechartsTooltip cursor={{ stroke: '#E5E7EB', strokeWidth: 2 }} contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }} />
-              <Line type="monotone" dataKey="winRate" name="Win Rate (%)" stroke="#0B3D91" strokeWidth={3} dot={{ r: 4, strokeWidth: 2 }} activeDot={{ r: 6 }} />
-              <Line type="monotone" dataKey="avgBidDifference" name="Avg Bid Diff (%)" stroke="#FF9933" strokeWidth={3} dot={{ r: 4, strokeWidth: 2 }} />
-            </LineChart>
-          </ResponsiveContainer>
+        <CardContent className="h-80" style={{ minHeight: 0 }}>
+          {mounted && (
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={performanceData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E5E7EB" />
+                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: '#6B7280', fontSize: 12 }} dy={10} />
+                <YAxis axisLine={false} tickLine={false} tick={{ fill: '#6B7280', fontSize: 12 }} />
+                <RechartsTooltip cursor={{ stroke: '#E5E7EB', strokeWidth: 2 }} contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }} />
+                <Line type="monotone" dataKey="winRate" name="Win Rate (%)" stroke="#0B3D91" strokeWidth={3} dot={{ r: 4, strokeWidth: 2 }} activeDot={{ r: 6 }} />
+                <Line type="monotone" dataKey="avgBidDifference" name="Avg Bid Diff (%)" stroke="#FF9933" strokeWidth={3} dot={{ r: 4, strokeWidth: 2 }} />
+              </LineChart>
+            </ResponsiveContainer>
+          )}
         </CardContent>
       </Card>
     </div>
@@ -498,6 +645,8 @@ const SettingsTab = () => (
 
 export default function DashboardPage() {
   const [activeTab, setActiveTab] = useState("overview")
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => setMounted(true), [])
   const router = useRouter()
   const { logout } = useAuth()
 
@@ -508,19 +657,21 @@ export default function DashboardPage() {
 
   const renderContent = () => {
     switch (activeTab) {
-      case "overview": return <OverviewTab />
+      case "overview": return <OverviewTab mounted={mounted} />
+      case "live": return <LiveTendersTab />
       case "bids": return <MyBidsTab />
       case "won": return <WonContractsTab />
       case "wallet": return <WalletTab />
-      case "analytics": return <AnalyticsTab />
+      case "analytics": return <AnalyticsTab mounted={mounted} />
       case "settings": return <SettingsTab />
-      default: return <OverviewTab />
+      default: return <OverviewTab mounted={mounted} />
     }
   }
 
   const getTabTitle = () => {
     switch (activeTab) {
       case "overview": return { title: "Welcome back, Demo Infra Pvt Ltd", subtitle: "Here's what's happening with your tender applications today." }
+      case "live": return { title: "Live Tenders", subtitle: "Monitor new tenders published by officers in real time." }
       case "bids": return { title: "My Bids", subtitle: "Manage and track all your active and past bid submissions." }
       case "won": return { title: "Won Contracts", subtitle: "Track progress and milestones of your awarded projects." }
       case "wallet": return { title: "Wallet & EMD", subtitle: "Manage your Earnest Money Deposits and transaction history." }
@@ -543,6 +694,7 @@ export default function DashboardPage() {
         <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
           {[
             { id: "overview", icon: LayoutDashboard, label: "Overview" },
+            { id: "live", icon: Gavel, label: "Live Tenders" },
             { id: "bids", icon: FileText, label: "My Bids" },
             { id: "won", icon: CheckCircle2, label: "Won Contracts" },
             { id: "wallet", icon: Wallet, label: "Wallet & EMD" },

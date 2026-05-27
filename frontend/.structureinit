@@ -1,0 +1,88 @@
+# Directory Structure Initialization
+
+This file documents the required folder structure for professional organization.
+The following directories should be created:
+
+## New Folders to Create
+
+src/
+├── hooks/
+├── lib/
+│   ├── store/
+│   ├── api/
+│   └── hooks/
+├── constants/
+└── components/
+    ├── common/
+    ├── features/
+    │   ├── tender/
+    │   ├── bid/
+    │   ├── kyc/
+    │   └── admin/
+    └── badges/
+
+src/app/
+├── (auth)/
+├── (officer)/
+├── (vendor)/
+└── (public)/
+
+## Key Changes
+
+### 1. Move Files:
+- src/lib/tenderStore.tsx → src/lib/store/tenderStore.tsx
+- src/lib/useBlockchainTx.ts → src/lib/hooks/useBlockchainTx.ts
+
+### 2. Reorganize Components:
+Common:
+  - Navbar.tsx
+  - Footer.tsx
+  - AuthProvider.tsx
+  - RoleGuard.tsx
+
+Features/Tender:
+  - CreateTenderModal.tsx
+
+Features/Bid:
+  - BidCountdown.tsx
+  - BlockchainTxModal.tsx
+
+Features/KYC:
+  - KYCStatusBadge.tsx
+  - KYCStatusStepper.tsx
+
+Features/Admin:
+  - AdminPageContent.tsx
+  - OfficerSidebar.tsx
+  - SystemHealthPanel.tsx
+
+Badges:
+  - EncryptedBidBadge.tsx
+  - ImmutableBadge.tsx
+  - IPFSHashPill.tsx
+  - WinnerBanner.tsx
+  - WeightSlider.tsx
+  - AuditTimeline.tsx
+  - WalletConnectButton.tsx
+
+### 3. Update All Imports:
+Change all relative imports to use @/ alias:
+  Old: import X from "../../../lib/utils"
+  New: import X from "@/lib/utils"
+
+### 4. Create Index Files:
+- src/lib/index.ts - export all store functions
+- src/components/index.ts - export common components
+- src/constants/index.ts - export constants
+
+### 5. TypeScript Config:
+Already configured with @/ alias path in tsconfig.json
+
+## Implementation Strategy
+
+Since folder creation is limited, the following approach is recommended:
+
+1. Update all imports in existing files to use @/ alias
+2. Create new organizational files with proper structure
+3. Document the new structure clearly
+4. Prepare migration guide for future reorganization
